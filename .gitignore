@@ -1,0 +1,44 @@
+# ⚠️ Escludi i file delle chiavi API e delle configurazioni sensibili
+.env
+.env.local
+.env.production
+config.json
+
+# 🐍 Escludi ambienti virtuali Python
+venv/
+.env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+
+# 🔥 Escludi file temporanei e di log
+*.log
+*.tmp
+*.swp
+*.swo
+*.DS_Store
+*.bak
+
+# 📦 Escludi dipendenze compilate e cache
+*.egg-info/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# 📂 Escludi file audio temporanei generati dall'app
+temp_audio.wav
+audio_samples/
+
+# 🔍 Escludi file di IDE e editor di testo
+.vscode/
+.idea/
+*.iml
+
+# 📸 Escludi database SQLite se lo usi per test locali
+*.sqlite3
+*.db
+
+# 🚀 Escludi file di build e deploy
+dist/
+build/
