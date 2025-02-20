@@ -5,3 +5,5 @@ numpy
 flask
 openai-whisper
 python-dotenv
+openai
+dotenv

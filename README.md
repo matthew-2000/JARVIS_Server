@@ -12,9 +12,6 @@ J.A.R.V.I.S. (Just An Adaptive Real-time Voice Interactive System) è un sistema
 ## 🔧 Tecnologie Utilizzate
 - **Python** (Flask per il server API)
 - **Whisper AI** (per la trascrizione vocale)
-- **OpenSMILE / Google Speech Emotion API** (per analisi emotiva)
-- **NLP Libraries** (NLTK, VADER, TextBlob per sentiment analysis)
-- **Unity + Oculus SDK** (per un'integrazione in AR, opzionale)
 
 ## 📦 Installazione
 
