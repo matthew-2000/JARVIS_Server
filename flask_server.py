@@ -1,24 +1,16 @@
 import os
-import whisper
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
+from transcriber import transcribe_audio
+from emotion_recognition import predict_emotion
 
 # Caricare le variabili d'ambiente
 load_dotenv()
 
 app = Flask(__name__)
-model = whisper.load_model("large")
 
-# Caricare API key da variabili d'ambiente
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-def transcribe_audio(audio_path):
-    """Trascrive l'audio in testo usando Whisper."""
-    try:
-        result = model.transcribe(audio_path, language="it", temperature=0)
-        return result.get("text", "Errore nella trascrizione")  # Restituisce solo il testo
-    except Exception as e:
-        return f"Errore: {str(e)}"
+# Configurazione: Attivare/disattivare il riconoscimento delle emozioni
+ENABLE_EMOTION_RECOGNITION = True  # Cambia in False se non vuoi riconoscere emozioni
 
 @app.route("/process_audio", methods=["POST"])
 def process_audio():
@@ -29,12 +21,29 @@ def process_audio():
     audio_path = "temp_audio.wav"
 
     try:
-        audio_file.save(audio_path)  # Salva il file temporaneamente
+        # Salva il file temporaneamente
+        audio_file.save(audio_path)
+
+        # Trascrizione
         text = transcribe_audio(audio_path)
-        os.remove(audio_path)  # Rimuove il file dopo la trascrizione
-        return jsonify({"transcription": text})
+
+        response = {"transcription": text}
+
+        # Se il riconoscimento delle emozioni è attivo
+        if ENABLE_EMOTION_RECOGNITION:
+            emotions = predict_emotion(audio_path)
+            if emotions:
+                response["emotions"] = {emotion: f"{score:.2%}" for emotion, score in emotions}
+            else:
+                response["emotions"] = "Errore nel riconoscimento delle emozioni"
+
+        # Rimuovere il file audio temporaneo
+        os.remove(audio_path)
+
+        return jsonify(response)
+
     except Exception as e:
-        return jsonify({"error": f"Errore durante la trascrizione: {str(e)}"}), 500
+        return jsonify({"error": f"Errore durante l'elaborazione: {str(e)}"}), 500
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=True)
