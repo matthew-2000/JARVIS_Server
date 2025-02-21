@@ -1,18 +1,43 @@
 # J.A.R.V.I.S. - Just An Adaptive Real-time Voice Interactive System
 
 ## 🛠️ Introduzione
-J.A.R.V.I.S. (Just An Adaptive Real-time Voice Interactive System) è un sistema interattivo vocale adattivo in tempo reale basato su **Flask**, **Whisper AI**, e tecnologie di analisi emotiva. Il progetto è stato sviluppato per offrire un'interazione vocale avanzata, con trascrizione dell'audio e possibilità di adattamento delle risposte in base al contesto e all'emozione dell'utente.
+**J.A.R.V.I.S. (Just An Adaptive Real-time Voice Interactive System)** è un assistente vocale avanzato che integra **Flask**, **Whisper AI**, **analisi emotiva** e **intelligenza artificiale** per offrire un'interazione vocale naturale e adattiva in tempo reale.
 
-## 🚀 Funzionalità
-- **Trascrizione Audio in Tempo Reale** ✨: Utilizza Whisper AI per convertire la voce in testo.
-- **Analisi Emotiva** 🚀: Integra moduli di analisi del tono della voce e sentiment analysis per comprendere le emozioni.
-- **Risposte Adattive** 💡: Personalizza le risposte in base allo stato emotivo dell'utente.
-- **Interfaccia API REST** 🛠: Supporto a richieste HTTP per l'elaborazione audio.
+### 🎯 Obiettivi del Progetto
+- **Riconoscimento Vocale Avanzato** 🎙️: Trascrizione accurata della voce con **Whisper AI**.
+- **Analisi delle Emozioni** 😊😡😢: Identificazione delle emozioni tramite il tono della voce.
+- **Risposte Intelligenti** 🤖: Adattamento delle risposte in base al contesto emotivo.
+- **Interfaccia API REST** 🌐: Servizio scalabile e accessibile tramite richieste HTTP.
+- **Flessibilità ed Espandibilità** 🔧: Modulare, facilmente integrabile con sistemi AR/VR e chatbot.
 
+---
+## 🚀 Funzionalità Principali
+
+### 🔊 1. Trascrizione Audio in Tempo Reale
+- Utilizza **Whisper AI** per convertire l’audio in testo con alta precisione.
+- Supporta **linguaggi multipli**, con ottimizzazione per l'italiano.
+
+### 🎭 2. Analisi delle Emozioni
+- Impiega **modelli di machine learning** per rilevare stati emotivi dall’audio.
+
+### 🧠 3. Risposte Adattive
+- Le risposte vengono **personalizzate** in base all'emozione rilevata.
+- Integra **ChatGPT API** per generare risposte contestuali ed empatiche.
+
+### 🌍 4. API REST per l'Integrazione
+- Endpoint per **trascrizione vocale** e **analisi delle emozioni**.
+- Progettato per essere integrato in **applicazioni AR/VR, chatbot e assistenti vocali**.
+
+---
 ## 🔧 Tecnologie Utilizzate
-- **Python** (Flask per il server API)
-- **Whisper AI** (per la trascrizione vocale)
+- **Python** 🐍 (Backend API con **Flask**)
+- **Whisper AI** 🎙️ (Trascrizione vocale)
+- **Transformers & Torch** 🤗 (Analisi emotiva)
+- **OpenAI API** 💬 (Generazione di risposte con ChatGPT)
+- **FFmpeg** 🎵 (Conversione audio)
+- **NLTK / VADER** 📊 (Sentiment Analysis testuale)
 
+---
 ## 📦 Installazione
 
 ### 1️⃣ Clona il repository
@@ -38,37 +63,45 @@ Crea un file `.env` nella root del progetto e aggiungi la tua chiave API:
 OPENAI_API_KEY=your_api_key_here
 ```
 
+---
 ## ▶️ Avvio del Server
 ```bash
-python app.py
+python flask_server/flask_server.py
 ```
 Il server partirà su `http://127.0.0.1:5000/`
 
+---
 ## 📡 API Endpoints
-### **Trascrizione Audio**
+
+### **1. Trascrizione Audio & Analisi Emotiva**
 **Endpoint:** `/process_audio`
 - **Metodo:** `POST`
 - **Parametri:**
-  - `audio` (file audio da trascrivere)
+  - `audio` (file audio da analizzare)
 - **Risposta:**
 ```json
 {
-  "transcription": "Testo trascritto dall'audio"
+  "transcription": "Testo trascritto dall'audio",
+  "emotions": {
+    "angry": "12.5%",
+    "happy": "65.4%",
+    "neutral": "22.1%"
+  },
+  "chatgpt_response": "Sembra che tu sia felice! Come posso aiutarti oggi?"
 }
 ```
 
-## 🛠️ Prossimi sviluppi
-- Integrazione avanzata con AR per esperienze immersive
-- Implementazione di un sistema di feedback vocale personalizzato
-- Miglioramento del riconoscimento emotivo
+---
 
+---
 ## 🤝 Contributi
-Se vuoi contribuire al progetto, sentiti libero di aprire una **Pull Request** o segnalare problemi nella sezione **Issues** del repository.
+Se vuoi contribuire al progetto, sentiti libero di:
+- **Aprire una Pull Request** 🛠️
+- **Segnalare un Issue** 🐛
+- **Proporre nuove funzionalità** 🚀
 
+---
 ## 📜 Licenza
 Questo progetto è distribuito sotto licenza **MIT**. Consulta il file `LICENSE` per maggiori dettagli.
 
 ---
-
-### 🔥 Creato con passione per un'interazione uomo-macchina sempre più empatica e intelligente! 🚀
-
