@@ -21,5 +21,5 @@ def test_audio_files(server_url, test_folder):
 
 if __name__ == "__main__":
     SERVER_URL = "http://127.0.0.1:5000"
-    TEST_FOLDER = "test_files"
+    TEST_FOLDER = "test/test_files"
     test_audio_files(SERVER_URL, TEST_FOLDER)
