@@ -5,6 +5,7 @@ from transcriber import transcribe_audio
 from emotion_recognition import predict_emotion
 import openai
 from collections import defaultdict
+import concurrent.futures
 
 # Caricare le variabili d'ambiente
 load_dotenv()
@@ -61,25 +62,38 @@ def process_audio():
         audio_file.save(audio_path)
         print(f"📂 File audio salvato temporaneamente in: {audio_path}")
 
-        # Trascrizione
-        text = transcribe_audio(audio_path)
-        print(f"📝 Trascrizione completata: {text}")
+        response = {}
 
-        response = {"transcription": text}
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future_transcription = executor.submit(transcribe_audio, audio_path)
+            future_emotions = executor.submit(predict_emotion, audio_path) if ENABLE_EMOTION_RECOGNITION else None
 
-        # Se il riconoscimento delle emozioni è attivo
-        if ENABLE_EMOTION_RECOGNITION:
-            print("🔍 Analizzando emozioni...")
-            emotions = predict_emotion(audio_path)
-            if emotions:
-                response["emotions"] = {emotion: f"{score:.2%}" for emotion, score in emotions}
-                print(f"✅ Emozioni rilevate: {response['emotions']}")
-            else:
-                response["emotions"] = "Errore nel riconoscimento delle emozioni"
-                print("❌ Errore nel riconoscimento delle emozioni")
+            try:
+                text = future_transcription.result(timeout=30)
+                print(f"📝 Trascrizione completata: {text}")
+                response["transcription"] = text
+            except concurrent.futures.TimeoutError:
+                print("⏰ Timeout durante la trascrizione!")
+                response["transcription"] = "Timeout durante la trascrizione"
+            except Exception as e:
+                print(f"❌ Errore nella trascrizione: {str(e)}")
+                response["transcription"] = "Errore nella trascrizione"
 
-        # Passiamo tutte le emozioni a ChatGPT
-        emotion_label = response["emotions"]
+            if future_emotions:
+                try:
+                    emotions = future_emotions.result(timeout=30)
+                    if emotions:
+                        response["emotions"] = {emotion: f"{score:.2%}" for emotion, score in emotions}
+                        print(f"✅ Emozioni rilevate: {response['emotions']}")
+                    else:
+                        response["emotions"] = "Errore nel riconoscimento delle emozioni"
+                        print("❌ Errore nel riconoscimento delle emozioni")
+                except Exception as e:
+                    print(f"❌ Errore durante l'analisi emotiva: {str(e)}")
+                    response["emotions"] = "Errore durante l'analisi emotiva"
+
+        text = response.get("transcription", "Testo non disponibile")
+        emotion_label = response.get("emotions", "Non rilevate")
         chatgpt_prompt = f"L'utente ha detto: '{text}'. Le emozioni rilevate sono {emotion_label}. Rispondi in modo appropriato."
 
         chatgpt_response = get_chatgpt_response(user_id, chatgpt_prompt)
