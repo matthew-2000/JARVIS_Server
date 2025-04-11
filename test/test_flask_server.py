@@ -14,6 +14,8 @@ def test_process_audio():
         )
     assert response.status_code == 200, f"Errore HTTP: {response.status_code}"
     data = response.json()
+    assert "transcription" in data, "Manca la trascrizione!"
+    assert "chatgpt_response" in data, "Manca la risposta GPT!"
     print("📝 Trascrizione:", data.get("transcription"))
     print("🎭 Emozioni:", data.get("emotions"))
     print("🤖 Risposta GPT:", data.get("chatgpt_response"))

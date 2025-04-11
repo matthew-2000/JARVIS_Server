@@ -1,9 +1,11 @@
 torch
 transformers
 soundfile
+sounddevice
 numpy
 flask
 openai-whisper
 python-dotenv
 openai
 dotenv
+requests
