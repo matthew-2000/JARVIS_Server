@@ -42,6 +42,11 @@ def stop_and_send():
     progress_bar.stop()
     status_text.set("💾 Salvataggio audio...")
 
+    if not audio_data:
+        status_text.set("⚠️ Nessun audio registrato.")
+        messagebox.showwarning("Avviso", "Nessun audio disponibile da salvare.")
+        return
+
     full_audio = np.concatenate(audio_data, axis=0)
     sf.write(AUDIO_PATH, full_audio, SAMPLERATE)
 

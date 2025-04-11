@@ -42,3 +42,6 @@ audio_samples/
 # 🚀 Escludi file di build e deploy
 dist/
 build/
+
+# 📦 Escludi file delle conversazioni
+conversations/

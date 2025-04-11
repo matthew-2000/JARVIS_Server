@@ -2,8 +2,10 @@ import os
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 import concurrent.futures
+import json
+from datetime import datetime
 
-# Import delle classi modulari dal package
+# Import delle classi dal package
 from components.audio_processor import AudioProcessor
 from components.emotion_recognizer import EmotionRecognizer
 from components.transcriber import Transcriber
@@ -38,6 +40,7 @@ service = AudioInteractionService(
     conv_manager=conversation_manager
 )
 
+
 @app.route("/process_audio", methods=["POST"])
 def process_audio():
     if "audio" not in request.files:
@@ -58,6 +61,8 @@ def process_audio():
             future_result = executor.submit(service.process_audio, user_id, audio_path, emotion_recognition_enabled)
             result = future_result.result(timeout=60)
 
+        save_conversation_to_file(user_id, result)
+
         print("[Server] Elaborazione completata.")
         print(f"[Server] Risultato: {result}")
 
@@ -72,11 +77,24 @@ def process_audio():
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
+
 @app.route("/reset_conversation", methods=["POST"])
 def reset_conversation():
     user_id = request.form.get("user_id", "default_user")
     conversation_manager.reset(user_id)
     print(f"[Server] Conversazione resettata per user_id: {user_id}")
+    # Aggiungi tag sessione nuova
+    filename = f"conversations/{user_id}.json"
+    if os.path.exists(filename):
+        with open(filename, "r+", encoding="utf-8") as f:
+            data = json.load(f)
+            data["session_id"] = data.get("session_id", 0) + 1
+            f.seek(0)
+            json.dump(data, f, indent=4, ensure_ascii=False)
+            f.truncate()
+    else:
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump({"user_id": user_id, "session_id": 1, "sessions": [[]]}, f, indent=4, ensure_ascii=False)
     return jsonify({"message": f"Conversazione per '{user_id}' resettata."}), 200
 
 @app.route("/set_emotion_enabled", methods=["POST"])
@@ -92,6 +110,44 @@ def set_emotion_enabled():
     else:
         return jsonify({"error": "Valore non valido. Usa 'true' o 'false'."}), 400
     return jsonify({"enabled": emotion_recognition_enabled})
+
+
+# Salva la conversazione
+def save_conversation_to_file(user_id, result):
+    os.makedirs("conversations", exist_ok=True)
+    filename = f"conversations/{user_id}.json"
+    timestamp = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+
+    entry = {
+        "timestamp": timestamp,
+        "transcription": result.get("transcription"),
+        "emotions": result.get("emotions"),
+        "chatgpt_response": result.get("chatgpt_response")
+    }
+
+    try:
+        if os.path.exists(filename):
+            with open(filename, "r", encoding="utf-8") as f:
+                history = json.load(f)
+        else:
+            history = {"user_id": user_id, "session_id": 1, "sessions": [[]]}
+
+        # Ensure structure
+        if "sessions" not in history or not isinstance(history["sessions"], list):
+            history["sessions"] = [[]]
+
+        current_session_index = history.get("session_id", 1) - 1
+        while len(history["sessions"]) <= current_session_index:
+            history["sessions"].append([])
+
+        history["sessions"][current_session_index].append(entry)
+
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(history, f, indent=4, ensure_ascii=False)
+
+        print(f"[Server] Conversazione aggiornata in {filename}")
+    except Exception as e:
+        print(f"[Server] Errore salvataggio conversazione: {e}")
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=True)
