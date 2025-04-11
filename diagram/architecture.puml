@@ -1,0 +1,42 @@
+@startuml JARVIS_System_Architecture
+
+title J.A.R.V.I.S. System Architecture (Component View)
+
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+skinparam defaultTextAlignment center
+
+package "Client Side" <<Node>> {
+    [REST API Client] <<Component>> #LightSkyBlue
+}
+
+node "Flask Server" <<Framework>> #Wheat {
+  [AudioInteractionService] <<Service>> #White
+  [AudioProcessor] <<Module>> #White
+  [Transcriber (Whisper)] <<Module>> #White
+  [EmotionRecognizer] <<Module>> #White
+  [ConversationManager] <<Module>> #White
+  [ChatAgent (GPT)] <<Module>> #White
+
+  [REST API Client] --> [Flask Server]
+  [Flask Server] --> [AudioInteractionService]
+  [AudioInteractionService] --> [AudioProcessor]
+  [AudioInteractionService] --> [Transcriber (Whisper)]
+  [AudioInteractionService] --> [EmotionRecognizer]
+  [AudioInteractionService] --> [ConversationManager]
+  [AudioInteractionService] --> [ChatAgent (GPT)]
+}
+
+cloud "External Services" {
+  database "ChatGPT API" {
+    [OpenAI API] <<External>> #LightGray
+  }
+  database "Whisper" {
+    [Whisper AI] <<External>> #LightGray
+  }
+
+  [ChatAgent (GPT)] --> [OpenAI API]
+  [Transcriber (Whisper)] --> [Whisper AI]
+}
+
+@enduml
