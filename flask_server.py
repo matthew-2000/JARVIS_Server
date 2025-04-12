@@ -9,6 +9,8 @@ from datetime import datetime
 from components.audio_processor import AudioProcessor
 from components.emotion_recognizer import EmotionRecognizer
 from components.transcriber import Transcriber
+from components.chat_model_interface import ChatModelInterface
+from components.ollama_chat_agent import OllamaChatAgent
 from components.chat_agent import ChatAgent
 from components.conversation_manager import ConversationManager
 from components.audio_interaction_service import AudioInteractionService
@@ -18,7 +20,7 @@ load_dotenv()
 
 # Configurazioni
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-ENABLE_EMOTION_RECOGNITION = True  # Può essere dinamico in futuro
+ENABLE_EMOTION_RECOGNITION = True
 emotion_recognition_enabled = ENABLE_EMOTION_RECOGNITION
 
 # Inizializza Flask
@@ -28,7 +30,14 @@ app = Flask(__name__)
 processor = AudioProcessor()
 recognizer = EmotionRecognizer() if ENABLE_EMOTION_RECOGNITION else None
 transcriber = Transcriber()
-chat_agent = ChatAgent(api_key=OPENAI_API_KEY)
+
+USE_LOCAL_MODEL = True  # cambia questo valore per usare OpenAI oppure Ollama
+
+if USE_LOCAL_MODEL:
+    chat_agent = OllamaChatAgent(model_name="llama3.2")
+else:
+    chat_agent = ChatAgent(api_key=OPENAI_API_KEY)
+
 conversation_manager = ConversationManager()
 
 # Servizio che coordina tutto
@@ -61,9 +70,8 @@ def process_audio():
             future_result = executor.submit(service.process_audio, user_id, audio_path, emotion_recognition_enabled)
             result = future_result.result(timeout=60)
 
-        save_conversation_to_file(user_id, result)
-
         print("[Server] Elaborazione completata.")
+        save_conversation_to_file(user_id, result)
         print(f"[Server] Risultato: {result}")
 
         # Pulisci

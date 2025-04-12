@@ -6,6 +6,7 @@ import requests
 import threading
 import numpy as np
 import os
+import time
 
 BASE_URL = "http://127.0.0.1:5000"
 USER_ID = "gui_user"
@@ -15,14 +16,18 @@ SAMPLERATE = 16000
 # Stato registrazione
 recording = False
 audio_data = []
+start_time = [0]
 
 def start_recording():
     global recording, audio_data
     audio_data = []
     recording = True
+    start_time[0] = time.time()
     status_text.set("🎙️ Registrazione in corso... Premi 'Stop & Invia' per terminare.")
     progress_bar.start()
     threading.Thread(target=record_loop).start()
+    update_timer()
+    draw_waveform()
 
 def record_loop():
     global audio_data
@@ -143,5 +148,40 @@ progress_bar.pack(pady=5)
 status_text = tk.StringVar()
 status_text.set("🟢 Pronto per iniziare.")
 tk.Label(root, textvariable=status_text).pack(pady=5)
+
+# Waveform Canvas
+waveform_canvas = tk.Canvas(root, width=500, height=100, bg="#ffffff", highlightthickness=1, highlightbackground="#ccc")
+waveform_canvas.pack(pady=5)
+
+# Timer Label
+timer_label = tk.Label(root, text="00:00", font=("Helvetica", 12), bg="#f5f5f5", fg="#444")
+timer_label.pack()
+
+def update_timer():
+    if recording:
+        elapsed = int(time.time() - start_time[0])
+        minutes = elapsed // 60
+        seconds = elapsed % 60
+        timer_label.config(text=f"{minutes:02d}:{seconds:02d}")
+        root.after(1000, update_timer)
+    else:
+        timer_label.config(text="00:00")
+
+def draw_waveform():
+    if not recording or not audio_data:
+        return
+    waveform_canvas.delete("all")
+    data = np.concatenate(audio_data[-20:], axis=0).flatten()[-500:]
+    data = data[::max(1, len(data) // 100)]  # downsample
+    w = waveform_canvas.winfo_width()
+    h = waveform_canvas.winfo_height()
+    mid = h // 2
+    scale = h / 32768
+    step = w / len(data)
+    for i, sample in enumerate(data):
+        x = i * step
+        y = int(sample * scale)
+        waveform_canvas.create_line(x, mid - y, x, mid + y, fill="#4caf50")
+    root.after(100, draw_waveform)
 
 root.mainloop()

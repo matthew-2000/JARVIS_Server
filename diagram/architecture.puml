@@ -16,7 +16,9 @@ node "Flask Server" <<Framework>> #Wheat {
   [Transcriber (Whisper)] <<Module>> #White
   [EmotionRecognizer] <<Module>> #White
   [ConversationManager] <<Module>> #White
-  [ChatAgent (GPT)] <<Module>> #White
+  [ChatModelInterface] <<Interface>> #White
+  [ChatAgent (GPT)] <<Component>> #White
+  [OllamaChatAgent] <<Component>> #White
 
   [REST API Client] --> [Flask Server]
   [Flask Server] --> [AudioInteractionService]
@@ -24,7 +26,9 @@ node "Flask Server" <<Framework>> #Wheat {
   [AudioInteractionService] --> [Transcriber (Whisper)]
   [AudioInteractionService] --> [EmotionRecognizer]
   [AudioInteractionService] --> [ConversationManager]
-  [AudioInteractionService] --> [ChatAgent (GPT)]
+  [AudioInteractionService] --> [ChatModelInterface]
+  [ChatModelInterface] <|.. [ChatAgent (GPT)]
+  [ChatModelInterface] <|.. [OllamaChatAgent]
 }
 
 cloud "External Services" {
@@ -37,6 +41,11 @@ cloud "External Services" {
 
   [ChatAgent (GPT)] --> [OpenAI API]
   [Transcriber (Whisper)] --> [Whisper AI]
+}
+
+node "Local AI Engine" <<Local>> #Moccasin {
+    [Ollama Server] <<Service>> #White
+    [OllamaChatAgent] --> [Ollama Server]
 }
 
 @enduml

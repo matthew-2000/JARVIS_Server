@@ -1,6 +1,8 @@
 import openai
+from components.chat_model_interface import ChatModelInterface
 
-class ChatAgent:
+
+class ChatAgent(ChatModelInterface):
     def __init__(self, api_key):
         openai.api_key = api_key
 
@@ -15,4 +17,3 @@ class ChatAgent:
         except Exception as e:
             print(f"[ChatAgent] Errore nella chiamata: {e}")
             return f"Errore: {e}"
-

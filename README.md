@@ -8,7 +8,7 @@
 - **Emotion Analysis** 😊😡😢: Detect user emotions through vocal tone.
 - **Intelligent Responses** 🤖: Tailor responses based on emotional context.
 - **RESTful API Interface** 🌐: Scalable service accessible via HTTP requests.
-- **Flexibility and Expandability** 🔧: Modular and easy to integrate with AR/VR systems and chatbots.
+- **Flexibility and Expandability** 🔧: Modular and easy to integrate with all client systems and chatbots.
 
 ---
 
@@ -20,11 +20,16 @@
 - **Emotion Recognition Toggle** 🎚️: Dynamically enable/disable emotional analysis via API endpoint.
 
 ### 🎭 2. Emotion Analysis
-- Utilizes **machine learning models** to detect emotional states from audio input.
+- Utilizes **machine learning models** to detect user emotional state from voice input.
 
 ### 🧠 3. Adaptive Responses
 - Responses are **personalized** based on the detected emotion.
 - Integrates **ChatGPT API** to generate empathetic and context-aware replies.
+
+### 🧠 3b. Selectable AI Model (Ollama/OpenAI)
+- The system supports both local (via **Ollama**, e.g., *LLaMA 3.2*) and cloud-based (via **OpenAI GPT**) language models.
+- Switching between the two is dynamic and controlled by the `USE_LOCAL_MODEL` variable in the code.
+- Ollama enables fully local inference, improving privacy and reducing usage costs.
 
 ### 🌍 4. RESTful API for Integration
 - Provides endpoints for **audio transcription** and **emotional response generation**.
@@ -42,9 +47,8 @@
 - **Python** 🐍 (Backend API using **Flask**)
 - **Whisper AI** 🎙️ (Voice transcription)
 - **Transformers & Torch** 🤗 (Emotion detection)
-- **OpenAI API** 💬 (Response generation via ChatGPT)
+- **OpenAI API / Ollama** 💬 (AI response generation, cloud or local)
 - **FFmpeg** 🎵 (Audio conversion)
-- **NLTK / VADER** 📊 (Textual sentiment analysis)
 
 ---
 
@@ -72,6 +76,7 @@ Create a `.env` file in the root directory and add your OpenAI API key:
 ```env
 OPENAI_API_KEY=your_api_key_here
 ```
+🚨 **Alert**: If using Ollama, make sure the local server is running:
 
 ---
 
@@ -80,6 +85,8 @@ OPENAI_API_KEY=your_api_key_here
 python flask_server.py
 ```
 The server will run at `http://127.0.0.1:5000/`
+
+**Note**: The server will automatically use the model defined in configuration: OpenAI or Ollama.
 
 ---
 
