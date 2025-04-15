@@ -1,3 +1,6 @@
+import time
+import concurrent.futures
+
 class AudioInteractionService:
     def __init__(self, processor, recognizer, transcriber, chat_agent, conv_manager):
         self.processor = processor
@@ -12,8 +15,25 @@ class AudioInteractionService:
         if audio_array is None:
             return {"error": "Errore nel caricamento audio"}
 
-        text = self.transcriber.transcribe(wav_path)
-        emotions = self.recognizer.predict(audio_array) if recognize_emotion else []
+        def transcribe():
+            start = time.time()
+            text = self.transcriber.transcribe(wav_path)
+            print(f"[Service] Tempo trascrizione: {time.time() - start:.2f} secondi")
+            return text
+
+        def recognize():
+            if not recognize_emotion:
+                return []
+            start = time.time()
+            emotions = self.recognizer.predict(audio_array)
+            print(f"[Service] Tempo riconoscimento emozioni: {time.time() - start:.2f} secondi")
+            return emotions
+
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future_trans = executor.submit(transcribe)
+            future_emo = executor.submit(recognize)
+            text = future_trans.result()
+            emotions = future_emo.result()
 
         emotion_info = {e: f"{s:.2%}" for e, s in emotions} if emotions else "Non rilevate"
         prompt = f"L'utente ha detto: '{text}'. Le emozioni rilevate sono {emotion_info}. Rispondi in modo appropriato."

@@ -1,7 +1,8 @@
 import os
+import time
+
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
-import concurrent.futures
 import json
 from datetime import datetime
 
@@ -14,6 +15,10 @@ from components.ollama_chat_agent import OllamaChatAgent
 from components.chat_agent import ChatAgent
 from components.conversation_manager import ConversationManager
 from components.audio_interaction_service import AudioInteractionService
+
+# Suppress warnings from transformers
+import warnings
+warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
 
 # Carica le variabili d'ambiente
 load_dotenv()
@@ -31,7 +36,7 @@ processor = AudioProcessor()
 recognizer = EmotionRecognizer() if ENABLE_EMOTION_RECOGNITION else None
 transcriber = Transcriber()
 
-USE_LOCAL_MODEL = True  # cambia questo valore per usare OpenAI oppure Ollama
+USE_LOCAL_MODEL = False  # cambia questo valore per usare OpenAI (false) oppure Ollama (true)
 
 if USE_LOCAL_MODEL:
     chat_agent = OllamaChatAgent(model_name="llama3.2")
@@ -65,10 +70,12 @@ def process_audio():
         print(f"[Server] Ricevuto file audio da user_id: {user_id}")
 
         print("[Server] Inizio elaborazione audio...")
-        # Esegui il processamento in parallelo (opzionale, ma utile se serve estendere)
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            future_result = executor.submit(service.process_audio, user_id, audio_path, emotion_recognition_enabled)
-            result = future_result.result(timeout=60)
+
+        start_time = time.time()
+        result = service.process_audio(user_id, audio_path, emotion_recognition_enabled)
+        end_time = time.time()
+
+        print(f"[Server] Tempo totale elaborazione: {end_time - start_time:.2f} secondi")
 
         print("[Server] Elaborazione completata.")
         save_conversation_to_file(user_id, result)

@@ -8,6 +8,7 @@ class EmotionRecognizer:
         self.id2label = self.model.config.id2label
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
+        self.model.eval()
 
     def predict(self, audio_array):
         inputs = self.extractor(audio_array, sampling_rate=self.extractor.sampling_rate, return_tensors="pt")
