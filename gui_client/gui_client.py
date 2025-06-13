@@ -1,187 +1,169 @@
+# gui_client.py
 import tkinter as tk
 from tkinter import scrolledtext, messagebox, ttk
 import sounddevice as sd
 import soundfile as sf
-import requests
-import threading
 import numpy as np
-import os
-import time
+import threading, time, os, requests
 
-BASE_URL = "http://127.0.0.1:5000"
-USER_ID = "gui_user"
+# ─────────── Config ───────────
+BASE_URL   = "http://127.0.0.1:5001"
+USER_ID    = "gui_user"
 AUDIO_PATH = "recorded.wav"
-SAMPLERATE = 16000
+SAMPLERATE = 16_000
 
-# Stato registrazione
-recording = False
-audio_data = []
-start_time = [0]
+# ────────── Stato globale ──────────
+recording       = False
+audio_chunks    = []           # blocchi int16 durante la registrazione
+last_emotions   = None         # salvate dall’ultimo /detect_emotions
+start_time      = [0]
 
+# ────────── Registrazione ──────────
 def start_recording():
-    global recording, audio_data
-    audio_data = []
-    recording = True
-    start_time[0] = time.time()
-    status_text.set("🎙️ Registrazione in corso... Premi 'Stop & Invia' per terminare.")
-    progress_bar.start()
-    threading.Thread(target=record_loop).start()
-    update_timer()
-    draw_waveform()
+    global recording, audio_chunks
+    audio_chunks.clear()
+    recording       = True
+    start_time[0]   = time.time()
+    status_text.set("🎙️ Registrazione in corso …")
+    progress.start()
+    threading.Thread(target=_record_loop, daemon=True).start()
+    _update_timer()
+    _draw_waveform()
 
-def record_loop():
-    global audio_data
+def _record_loop():
     try:
-        with sd.InputStream(samplerate=SAMPLERATE, channels=1, dtype='int16') as stream:
+        with sd.InputStream(samplerate=SAMPLERATE, channels=1, dtype="int16") as stream:
             while recording:
                 block, _ = stream.read(1024)
-                audio_data.append(block)
+                audio_chunks.append(block)
     except Exception as e:
-        status_text.set(f"❌ Errore durante la registrazione: {str(e)}")
+        status_text.set(f"❌ Errore registrazione: {e}")
 
-def stop_and_send():
-    global recording, audio_data
+def stop_and_analyze():
+    global recording, last_emotions
     if not recording:
         return
     recording = False
-    progress_bar.stop()
-    status_text.set("💾 Salvataggio audio...")
+    progress.stop()
+    status_text.set("💾 Salvataggio audio …")
 
-    if not audio_data:
+    if not audio_chunks:
         status_text.set("⚠️ Nessun audio registrato.")
-        messagebox.showwarning("Avviso", "Nessun audio disponibile da salvare.")
         return
 
-    full_audio = np.concatenate(audio_data, axis=0)
-    sf.write(AUDIO_PATH, full_audio, SAMPLERATE)
+    sf.write(AUDIO_PATH, np.concatenate(audio_chunks), SAMPLERATE)
 
-    async_action(send_audio)
-
-def cancel_recording():
-    global recording, audio_data
-    recording = False
-    audio_data = []
-    progress_bar.stop()
-    status_text.set("🛑 Registrazione annullata.")
-
-def send_audio():
+    # ─── /detect_emotions ───
     try:
-        status_text.set("📡 Inviando audio al server...")
-        progress_bar.start()
-        root.update()
-        with open(AUDIO_PATH, 'rb') as f:
-            response = requests.post(
-                f"{BASE_URL}/process_audio",
-                files={"audio": f},
-                data={"user_id": USER_ID}
-            )
-        data = response.json()
-        if "error" in data:
-            raise Exception(data["error"])
-        output_text.delete(1.0, tk.END)
-        output_text.insert(tk.END, f"📝 Trascrizione:\n{data.get('transcription')}\n\n")
-        output_text.insert(tk.END, f"🎭 Emozioni:\n{data.get('emotions')}\n\n")
-        output_text.insert(tk.END, f"🤖 Risposta GPT:\n{data.get('chatgpt_response')}\n")
-        status_text.set("✅ Risposta ricevuta.")
+        status_text.set("📡 Analisi emozioni …")
+        with open(AUDIO_PATH, "rb") as f:
+            r = requests.post(f"{BASE_URL}/detect_emotions",
+                              files={"audio": f},
+                              data={"user_id": USER_ID})
+        r.raise_for_status()
+        last_emotions = r.json().get("emotions", {})
+        output_text.insert(tk.END, f"🎭 Emozioni: {last_emotions}\n")
+        status_text.set("✅ Emozioni pronte (ora digita il testo e premi Invia).")
     except Exception as e:
-        messagebox.showerror("Errore", f"Errore durante l'invio: {str(e)}")
-        status_text.set("❌ Errore durante l'invio.")
+        messagebox.showerror("Errore", str(e))
+        status_text.set("❌ Errore /detect_emotions.")
     finally:
-        progress_bar.stop()
         if os.path.exists(AUDIO_PATH):
             os.remove(AUDIO_PATH)
 
-def toggle_emotion_recognition():
-    enabled = emotion_var.get()
-    try:
-        response = requests.post(f"{BASE_URL}/set_emotion_enabled", data={"enabled": str(enabled)})
-        if response.status_code == 200:
-            status_text.set("🎭 Riconoscimento emozioni: " + ("abilitato" if enabled else "disabilitato"))
-        else:
-            raise Exception("Errore nel settaggio")
-    except Exception as e:
-        messagebox.showerror("Errore", f"Errore nella modifica del riconoscimento emozioni: {str(e)}")
-        emotion_var.set(not enabled)
+def cancel_recording():
+    global recording, audio_chunks
+    recording = False
+    audio_chunks.clear()
+    progress.stop()
+    status_text.set("🛑 Registrazione annullata.")
 
+# ────────── Chat ──────────
+def send_chat():
+    text = user_entry.get("1.0", tk.END).strip()
+    if not text:
+        messagebox.showwarning("Vuoto", "Scrivi un messaggio prima di inviare.")
+        return
+    payload = {
+        "user_id": USER_ID,
+        "text": text,
+        "emotions": last_emotions       # può essere None
+    }
+    threading.Thread(target=_call_chat_endpoint, args=(payload,), daemon=True).start()
+
+def _call_chat_endpoint(payload):
+    try:
+        status_text.set("🤖 Inviando al LLM …")
+        progress.start()
+        r = requests.post(f"{BASE_URL}/chat_message", json=payload)
+        r.raise_for_status()
+        answer = r.json().get("response", "<nessuna risposta>")
+        output_text.insert(tk.END, f"📝 Tu: {payload['text']}\n")
+        output_text.insert(tk.END, f"🤖 LLM: {answer}\n\n")
+        user_entry.delete("1.0", tk.END)
+        status_text.set("✅ Risposta ricevuta.")
+    except Exception as e:
+        messagebox.showerror("Errore", str(e))
+        status_text.set("❌ Errore /chat_message.")
+    finally:
+        progress.stop()
+
+# ────────── Reset conversazione ──────────
 def reset_conversation():
     try:
-        response = requests.post(f"{BASE_URL}/reset_conversation", data={"user_id": USER_ID})
-        if response.status_code == 200:
-            status_text.set("♻️ Conversazione resettata.")
-            output_text.delete(1.0, tk.END)
-        else:
-            raise Exception("Reset fallito")
+        requests.post(f"{BASE_URL}/reset_conversation", data={"user_id": USER_ID}).raise_for_status()
+        output_text.delete(1.0, tk.END)
+        status_text.set("♻️ Conversazione resettata.")
     except Exception as e:
-        messagebox.showerror("Errore", f"Errore nel reset: {str(e)}")
+        messagebox.showerror("Errore", str(e))
 
-# Funzione per eseguire in thread separato
-def async_action(fn):
-    threading.Thread(target=fn).start()
-
-# GUI
-root = tk.Tk()
-root.title("🎧 Assistente AR Emotivo")
-
-# Bottoni
-frame_btn = tk.Frame(root)
-frame_btn.pack(pady=10)
-
-tk.Button(frame_btn, text="🔴 Start Registrazione", width=20, command=start_recording).grid(row=0, column=0, padx=5)
-tk.Button(frame_btn, text="⏹️ Stop & Invia", width=20, command=stop_and_send).grid(row=0, column=1, padx=5)
-tk.Button(frame_btn, text="❌ Annulla", width=15, command=cancel_recording).grid(row=0, column=2, padx=5)
-
-tk.Button(root, text="♻️ Reset Conversazione", width=30, command=lambda: async_action(reset_conversation)).pack(pady=5)
-
-# Switch emozioni
-emotion_var = tk.BooleanVar(value=True)
-tk.Checkbutton(root, text="🎭 Riconoscimento Emozioni", variable=emotion_var, command=lambda: async_action(toggle_emotion_recognition)).pack()
-
-# Output
-output_text = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=70, height=20)
-output_text.pack(padx=10, pady=10)
-
-# Progress bar
-progress_bar = ttk.Progressbar(root, orient=tk.HORIZONTAL, length=400, mode='indeterminate')
-progress_bar.pack(pady=5)
-
-# Status
-status_text = tk.StringVar()
-status_text.set("🟢 Pronto per iniziare.")
-tk.Label(root, textvariable=status_text).pack(pady=5)
-
-# Waveform Canvas
-waveform_canvas = tk.Canvas(root, width=500, height=100, bg="#ffffff", highlightthickness=1, highlightbackground="#ccc")
-waveform_canvas.pack(pady=5)
-
-# Timer Label
-timer_label = tk.Label(root, text="00:00", font=("Helvetica", 12), bg="#f5f5f5", fg="#444")
-timer_label.pack()
-
-def update_timer():
+# ────────── GUI util ──────────
+def _update_timer():
     if recording:
         elapsed = int(time.time() - start_time[0])
-        minutes = elapsed // 60
-        seconds = elapsed % 60
-        timer_label.config(text=f"{minutes:02d}:{seconds:02d}")
-        root.after(1000, update_timer)
+        timer.config(text=f"{elapsed//60:02d}:{elapsed%60:02d}")
+        root.after(1000, _update_timer)
     else:
-        timer_label.config(text="00:00")
+        timer.config(text="00:00")
 
-def draw_waveform():
-    if not recording or not audio_data:
+def _draw_waveform():
+    if not recording or not audio_chunks:
         return
-    waveform_canvas.delete("all")
-    data = np.concatenate(audio_data[-20:], axis=0).flatten()[-500:]
-    data = data[::max(1, len(data) // 100)]  # downsample
-    w = waveform_canvas.winfo_width()
-    h = waveform_canvas.winfo_height()
-    mid = h // 2
-    scale = h / 32768
-    step = w / len(data)
-    for i, sample in enumerate(data):
-        x = i * step
-        y = int(sample * scale)
-        waveform_canvas.create_line(x, mid - y, x, mid + y, fill="#4caf50")
-    root.after(100, draw_waveform)
+    canvas.delete("all")
+    samples = np.concatenate(audio_chunks[-20:], axis=0).flatten()[-500:]
+    samples = samples[::max(1, len(samples)//100)]
+    w, h = canvas.winfo_width(), canvas.winfo_height()
+    mid, step, scale = h//2, w/len(samples), h/32768
+    for i, s in enumerate(samples):
+        x, y = i*step, int(s*scale)
+        canvas.create_line(x, mid-y, x, mid+y, fill="#4caf50")
+    root.after(60, _draw_waveform)
+
+# ────────── Build GUI ──────────
+root = tk.Tk(); root.title("🎧 Assistente Emotivo – client")
+
+frm = tk.Frame(root); frm.pack(pady=10)
+tk.Button(frm, text="🔴 Start",   width=15, command=start_recording).grid(row=0,column=0,padx=4)
+tk.Button(frm, text="⏹ Stop & Emo", width=15, command=stop_and_analyze).grid(row=0,column=1,padx=4)
+tk.Button(frm, text="❌ Annulla", width=10, command=cancel_recording).grid(row=0,column=2,padx=4)
+tk.Button(frm, text="✉️ Invia Testo", width=15, command=send_chat).grid(row=0,column=3,padx=4)
+
+tk.Button(root, text="♻️ Reset Conversazione", command=reset_conversation).pack(pady=4)
+
+user_entry = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=60, height=4)
+user_entry.pack(padx=10, pady=6)
+
+output_text = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=70, height=18)
+output_text.pack(padx=10, pady=6)
+
+progress = ttk.Progressbar(root, orient=tk.HORIZONTAL, length=400, mode="indeterminate")
+progress.pack(pady=3)
+
+status_text = tk.StringVar(value="🟢 Pronto.")
+tk.Label(root, textvariable=status_text).pack()
+
+canvas = tk.Canvas(root, width=500, height=100, bg="#fff",
+                   highlightthickness=1, highlightbackground="#ccc"); canvas.pack(pady=5)
+timer = tk.Label(root, text="00:00", font=("Helvetica",12)); timer.pack()
 
 root.mainloop()

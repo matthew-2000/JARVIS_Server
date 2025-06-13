@@ -1,143 +1,120 @@
+# server.py
 import os
+import json
 import time
+from datetime import datetime
 
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
-import json
-from datetime import datetime
 
-# Import delle classi dal package
+# ───────────────────────── Components ──────────────────────────
 from components.audio_processor import AudioProcessor
 from components.emotion_recognizer import EmotionRecognizer
-from components.transcriber import Transcriber
-from components.chat_model_interface import ChatModelInterface
-from components.ollama_chat_agent import OllamaChatAgent
 from components.chat_agent import ChatAgent
+from components.ollama_chat_agent import OllamaChatAgent
 from components.conversation_manager import ConversationManager
-from components.audio_interaction_service import AudioInteractionService
+from components.orchestrator import Orchestrator
 
-# Suppress warnings from transformers
-import warnings
-warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
-
-# Carica le variabili d'ambiente
+# ────────────────────────── Config ─────────────────────────────
 load_dotenv()
-
-# Configurazioni
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-ENABLE_EMOTION_RECOGNITION = True
-emotion_recognition_enabled = ENABLE_EMOTION_RECOGNITION
 
-# Inizializza Flask
-app = Flask(__name__)
+ENABLE_EMOTION_RECOGNITION = True          # abilita /disabilita endpoint audio
+USE_LOCAL_MODEL           = False          # True = Ollama, False = OpenAI GPT-4o-mini
 
-# Inizializza i componenti
-processor = AudioProcessor()
-recognizer = EmotionRecognizer() if ENABLE_EMOTION_RECOGNITION else None
-transcriber = Transcriber()
+# ───────────────────────── Instances ───────────────────────────
+app                = Flask(__name__)
+audio_processor     = AudioProcessor()
+emotion_recognizer  = EmotionRecognizer() if ENABLE_EMOTION_RECOGNITION else None
+chat_agent          = OllamaChatAgent() if USE_LOCAL_MODEL else ChatAgent(api_key=OPENAI_API_KEY)
+conv_manager        = ConversationManager()
+orchestrator        = Orchestrator(chat_agent=chat_agent, conv_manager=conv_manager)
 
-USE_LOCAL_MODEL = False  # cambia questo valore per usare OpenAI (false) oppure Ollama (true)
-
-if USE_LOCAL_MODEL:
-    chat_agent = OllamaChatAgent(model_name="llama3.2")
-else:
-    chat_agent = ChatAgent(api_key=OPENAI_API_KEY)
-
-conversation_manager = ConversationManager()
-
-# Servizio che coordina tutto
-service = AudioInteractionService(
-    processor=processor,
-    recognizer=recognizer,
-    transcriber=transcriber,
-    chat_agent=chat_agent,
-    conv_manager=conversation_manager
-)
-
-
-@app.route("/process_audio", methods=["POST"])
-def process_audio():
+# ════════════════════════  ENDPOINTS  ══════════════════════════
+@app.route("/detect_emotions", methods=["POST"])
+def detect_emotions():
+    """Riceve un file audio, restituisce le emozioni riconosciute."""
+    if not emotion_recognizer:
+        return jsonify({"error": "Riconoscimento emozioni disabilitato"}), 400
     if "audio" not in request.files:
         return jsonify({"error": "Nessun file audio ricevuto"}), 400
 
     audio_file = request.files["audio"]
-    user_id = request.form.get("user_id", "default_user")
-    audio_path = "temp_audio.wav"
+    user_id    = request.form.get("user_id", "default_user")
+    tmp_path   = "temp_audio.wav"
 
     try:
-        # Salva l'audio
-        audio_file.save(audio_path)
-        print(f"[Server] Ricevuto file audio da user_id: {user_id}")
+        audio_file.save(tmp_path)
+        wav_path   = audio_processor.convert_to_wav(tmp_path) or tmp_path
+        audio_arr  = audio_processor.load_audio(wav_path, max_duration_sec=30)
+        emotions   = emotion_recognizer.predict(audio_arr)
+        emotion_js = {e: f"{p:.2%}" for e, p in emotions}
 
-        print("[Server] Inizio elaborazione audio...")
-
-        start_time = time.time()
-        result = service.process_audio(user_id, audio_path, emotion_recognition_enabled)
-        end_time = time.time()
-
-        print(f"[Server] Tempo totale elaborazione: {end_time - start_time:.2f} secondi")
-
-        print("[Server] Elaborazione completata.")
-        save_conversation_to_file(user_id, result)
-        print(f"[Server] Risultato: {result}")
-
-        # Pulisci
-        os.remove(audio_path)
-
-        return jsonify(result)
+        os.remove(tmp_path)
+        return jsonify({"user_id": user_id, "emotions": emotion_js})
 
     except Exception as e:
-        print(f"[Server] Errore durante l'elaborazione: {e}")
-        import traceback
-        traceback.print_exc()
+        import traceback; traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/chat_message", methods=["POST"])
+def chat_message():
+    """
+    Body JSON:
+    {
+      "user_id": "...",
+      "text": "trascrizione dell'utente",
+      "emotions": { "happy": "75.33%", ... }   #  facoltativo
+    }
+    """
+    data     = request.get_json(silent=True) or {}
+    user_id  = data.get("user_id", "default_user")
+    text     = data.get("text", "").strip()
+    emotions = data.get("emotions")            # può essere None
+
+    if not text:
+        return jsonify({"error": "Campo 'text' mancante"}), 400
+
+    try:
+        response = orchestrator.generate_response(user_id, text, emotions)
+        save_conversation_to_file(user_id, text, emotions, response)
+        return jsonify({"user_id": user_id, "response": response})
+
+    except Exception as e:
+        import traceback; traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
 
 @app.route("/reset_conversation", methods=["POST"])
 def reset_conversation():
     user_id = request.form.get("user_id", "default_user")
-    conversation_manager.reset(user_id)
-    print(f"[Server] Conversazione resettata per user_id: {user_id}")
-    # Aggiungi tag sessione nuova
+    conv_manager.reset(user_id)
+    # bump session counter
     filename = f"conversations/{user_id}.json"
     if os.path.exists(filename):
         with open(filename, "r+", encoding="utf-8") as f:
-            data = json.load(f)
-            data["session_id"] = data.get("session_id", 0) + 1
-            f.seek(0)
-            json.dump(data, f, indent=4, ensure_ascii=False)
-            f.truncate()
+            hist = json.load(f)
+            hist["session_id"] = hist.get("session_id", 0) + 1
+            f.seek(0); json.dump(hist, f, indent=4, ensure_ascii=False); f.truncate()
     else:
+        os.makedirs("conversations", exist_ok=True)
         with open(filename, "w", encoding="utf-8") as f:
             json.dump({"user_id": user_id, "session_id": 1, "sessions": [[]]}, f, indent=4, ensure_ascii=False)
-    return jsonify({"message": f"Conversazione per '{user_id}' resettata."}), 200
-
-@app.route("/set_emotion_enabled", methods=["POST"])
-def set_emotion_enabled():
-    global emotion_recognition_enabled
-    val = request.form.get("enabled", "").lower()
-    if val == "true":
-        emotion_recognition_enabled = True
-        print("[Server] Riconoscimento emozioni abilitato.")
-    elif val == "false":
-        emotion_recognition_enabled = False
-        print("[Server] Riconoscimento emozioni disabilitato.")
-    else:
-        return jsonify({"error": "Valore non valido. Usa 'true' o 'false'."}), 400
-    return jsonify({"enabled": emotion_recognition_enabled})
+    return jsonify({"message": "Conversazione resettata."})
 
 
-# Salva la conversazione
-def save_conversation_to_file(user_id, result):
+# ─────────────────── Persistenza su JSON ───────────────────────
+def save_conversation_to_file(user_id, text, emotions, bot_response):
     os.makedirs("conversations", exist_ok=True)
-    filename = f"conversations/{user_id}.json"
+    filename  = f"conversations/{user_id}.json"
     timestamp = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
 
     entry = {
         "timestamp": timestamp,
-        "transcription": result.get("transcription"),
-        "emotions": result.get("emotions"),
-        "chatgpt_response": result.get("chatgpt_response")
+        "transcription": text,
+        "emotions": emotions or "Non rilevate",
+        "chatgpt_response": bot_response
     }
 
     try:
@@ -147,22 +124,17 @@ def save_conversation_to_file(user_id, result):
         else:
             history = {"user_id": user_id, "session_id": 1, "sessions": [[]]}
 
-        # Ensure structure
-        if "sessions" not in history or not isinstance(history["sessions"], list):
-            history["sessions"] = [[]]
-
-        current_session_index = history.get("session_id", 1) - 1
-        while len(history["sessions"]) <= current_session_index:
+        sess_idx = history.get("session_id", 1) - 1
+        while len(history["sessions"]) <= sess_idx:
             history["sessions"].append([])
-
-        history["sessions"][current_session_index].append(entry)
+        history["sessions"][sess_idx].append(entry)
 
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(history, f, indent=4, ensure_ascii=False)
 
-        print(f"[Server] Conversazione aggiornata in {filename}")
     except Exception as e:
         print(f"[Server] Errore salvataggio conversazione: {e}")
 
+# ─────────────────────────── Main ──────────────────────────────
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    app.run(host="127.0.0.1", port=5001, debug=True)
