@@ -1,51 +1,57 @@
-@startuml JARVIS_System_Architecture
+@startuml JARVIS_Architecture
 
 title J.A.R.V.I.S. System Architecture (Component View)
 
-skinparam componentStyle rectangle
-skinparam packageStyle rectangle
-skinparam defaultTextAlignment center
+left to right direction
 
-package "Client Side" <<Node>> {
-    [REST API Client] <<Component>> #LightSkyBlue
+skinparam componentStyle rectangle
+skinparam packageStyle   rectangle
+skinparam defaultTextAlignment center
+skinparam nodeMargin 20
+
+package "Client Device" <<Node>> {
+  [UI / XR App]         <<Component>> #LightSkyBlue
 }
 
 node "Flask Server" <<Framework>> #Wheat {
-  [AudioInteractionService] <<Service>> #White
-  [AudioProcessor] <<Module>> #White
-  [Transcriber (Whisper)] <<Module>> #White
-  [EmotionRecognizer] <<Module>> #White
-  [ConversationManager] <<Module>> #White
-  [ChatModelInterface] <<Interface>> #White
-  [ChatAgent (GPT)] <<Component>> #White
-  [OllamaChatAgent] <<Component>> #White
 
-  [REST API Client] --> [Flask Server]
-  [Flask Server] --> [AudioInteractionService]
-  [AudioInteractionService] --> [AudioProcessor]
-  [AudioInteractionService] --> [Transcriber (Whisper)]
-  [AudioInteractionService] --> [EmotionRecognizer]
-  [AudioInteractionService] --> [ConversationManager]
-  [AudioInteractionService] --> [ChatModelInterface]
-  [ChatModelInterface] <|.. [ChatAgent (GPT)]
-  [ChatModelInterface] <|.. [OllamaChatAgent]
+  [Upload Endpoint]     <<REST>>    #White
+  [Chat Endpoint]       <<REST>>    #White
+
+  package "Audio Pipeline" {
+    [AudioProcessor]      <<Module>>  #White
+    [AudioAccumulator]    <<Module>>  #White
+    [EmotionRecognizer]   <<Module>>  #White
+    [EmotionMemory]       <<Cache>>   #White
+  }
+
+  package "Conversational Core" {
+    [ConversationManager] <<Module>>  #White
+    [Orchestrator]        <<Service>> #White
+    [ChatAgent (GPT)]     <<Component>> #White
+    [OllamaChatAgent]     <<Component>> #White
+  }
+
+  [UI / XR App] --> [Upload Endpoint] : audio chunks
+  [UI / XR App] --> [Chat Endpoint]   : text
+
+  [Upload Endpoint] --> [AudioProcessor]
+  [AudioProcessor]  --> [AudioAccumulator]
+  [AudioAccumulator] --> [EmotionRecognizer] : ≥ 25 s\ntrigger
+  [EmotionRecognizer] --> [EmotionMemory]
+
+  [Chat Endpoint] --> [Orchestrator]
+  [Orchestrator] --> [EmotionMemory]
+  [Orchestrator] --> [ConversationManager]
+  [Orchestrator] --> [ChatAgent (GPT)]
+  [ChatAgent (GPT)] ..|> [OllamaChatAgent]
 }
 
-cloud "External Services" {
-  database "ChatGPT API" {
-    [OpenAI API] <<External>> #LightGray
-  }
-  database "Whisper" {
-    [Whisper AI] <<External>> #LightGray
-  }
-
+cloud "LLM Back-ends" {
+  [OpenAI API]    <<External>> #LightGray
+  [Ollama Server] <<Local>>    #Moccasin
   [ChatAgent (GPT)] --> [OpenAI API]
-  [Transcriber (Whisper)] --> [Whisper AI]
-}
-
-node "Local AI Engine" <<Local>> #Moccasin {
-    [Ollama Server] <<Service>> #White
-    [OllamaChatAgent] --> [Ollama Server]
+  [OllamaChatAgent] --> [Ollama Server]
 }
 
 @enduml

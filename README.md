@@ -1,139 +1,66 @@
-# J.A.R.V.I.S. - Just An Adaptive Real-time Voice Interactive System
+# J.A.R.V.I.S. — Just An Adaptive Real-time Voice Interactive System
 
-## 🛠️ Introduction
-**J.A.R.V.I.S. (Just An Adaptive Real-time Voice Interactive System)** is an advanced voice assistant that integrates **Flask**, **Whisper AI**, **emotional analysis**, and **artificial intelligence** to provide natural and adaptive real-time voice interaction.
-
-### 🎯 Project Goals
-- **Advanced Voice Recognition** 🎙️: Accurate transcription using **Whisper AI**.
-- **Emotion Analysis** 😊😡😢: Detect user emotions through vocal tone.
-- **Intelligent Responses** 🤖: Tailor responses based on emotional context.
-- **RESTful API Interface** 🌐: Scalable service accessible via HTTP requests.
-- **Flexibility and Expandability** 🔧: Modular and easy to integrate with all client systems and chatbots.
+An adaptive voice-assistant backend that combines real-time audio buffering, vocal-emotion detection and large-language-model reasoning.  
+Designed to plug into any client (mobile, XR, web) via a lightweight REST API.
 
 ---
 
-## 🚀 Key Features
-
-### 🔊 1. Real-Time Audio Transcription
-- Uses **Whisper AI** for high-accuracy audio-to-text conversion.
-- Supports **multiple languages**, with optimization for Italian.
-- **Emotion Recognition Toggle** 🎚️: Dynamically enable/disable emotional analysis via API endpoint.
-
-### 🎭 2. Emotion Analysis
-- Utilizes **machine learning models** to detect user emotional state from voice input.
-
-### 🧠 3. Adaptive Responses
-- Responses are **personalized** based on the detected emotion.
-- Integrates **ChatGPT API** to generate empathetic and context-aware replies.
-
-### 🧠 3b. Selectable AI Model (Ollama/OpenAI)
-- The system supports both local (via **Ollama**, e.g., *LLaMA 3.2*) and cloud-based (via **OpenAI GPT**) language models.
-- Switching between the two is dynamic and controlled by the `USE_LOCAL_MODEL` variable in the code.
-- Ollama enables fully local inference, improving privacy and reducing usage costs.
-
-### 🌍 4. RESTful API for Integration
-- Provides endpoints for **audio transcription** and **emotional response generation**.
-- Designed for integration into **AR/VR apps, chatbots, and smart assistants**.
+## ✨ Key Features
+| Capability | Description |
+|------------|-------------|
+| **Client-side ASR** | The client transcribes speech locally (e.g., Whisper) and sends plain text to the server. |
+| **Audio buffering & emotion inference** | Audio clips are posted to `/upload_audio`; once the accumulated length reaches **25 s** (configurable) the server runs a single emotion-recognition pass and caches the result for **30 s**. |
+| **Adaptive prompt orchestration** | The `/chat_message` endpoint merges the latest emotions (if still fresh) with the user text to craft an empathetic prompt. |
+| **Dual LLM backend** | Switch between **OpenAI GPT-4o-mini** or a fully local **Ollama** model by toggling one flag. |
+| **Stateless JSON logging** | Conversation turns are appended to a per-user JSON file—no database required. |
 
 ---
 
-## 🧱 System Architecture
+## 🚀 Quick Start
 
-![JARVIS Architecture](diagram/architecture.svg)
-
----
-
-## 🔧 Technologies Used
-- **Python** 🐍 (Backend API using **Flask**)
-- **Whisper AI** 🎙️ (Voice transcription)
-- **Transformers & Torch** 🤗 (Emotion detection)
-- **OpenAI API / Ollama** 💬 (AI response generation, cloud or local)
-- **FFmpeg** 🎵 (Audio conversion)
-
----
-
-## 📦 Installation
-
-### 1️⃣ Clone the repository
 ```bash
 git clone https://github.com/your-username/JARVIS.git
 cd JARVIS
-```
-
-### 2️⃣ Create and activate a virtual environment
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-### 3️⃣ Install dependencies
-```bash
+python -m venv venv && source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-```
-
-### 4️⃣ Configure the `.env` file
-Create a `.env` file in the root directory and add your OpenAI API key:
-```env
-OPENAI_API_KEY=your_api_key_here
-```
-🚨 **Alert**: If using Ollama, make sure the local server is running:
+echo "OPENAI_API_KEY=sk-…" > .env                      # Skip if using Ollama only
+python server.py                                       # default: http://127.0.0.1:5001
+````
 
 ---
 
-## ▶️ Starting the Server
-```bash
-python flask_server.py
-```
-The server will run at `http://127.0.0.1:5000/`
+## 🌐 REST API
 
-**Note**: The server will automatically use the model defined in configuration: OpenAI or Ollama.
+| Endpoint              | Method             | Purpose                                                                                                                                                                            |
+| --------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/upload_audio`       | `POST` (multipart) | Send a single audio chunk (`audio` file + `user_id`). Returns<br>`{"status":"buffering"}` until 25 s of audio have been collected, then<br>`{"status":"inferred","emotions":{…}}`. |
+| `/chat_message`       | `POST` (JSON)      | `{ "user_id": "...", "text": "..." }` → `{ "response": "..." }`. The server adds cached emotions to the prompt if available (< 30 s old).                                          |
+| `/reset_conversation` | `POST` (form)      | Clears in-memory history, emotion cache and the audio buffer for the user.                                                                                                         |
 
 ---
 
-## 📡 API Endpoints
+## 🏗️ Architecture Overview
 
-### **1. Audio Processing with Emotion Detection**
-**Endpoint:** `/process_audio`  
-- **Method:** `POST`  
-- **Parameters:**
-  - `audio` — the audio file to be analyzed  
-  - `user_id` *(optional)* — identifies the session/user  
-- **Response:**
-```json
-{
-  "transcription": "Transcribed user speech",
-  "emotions": {
-    "angry": "12.5%",
-    "happy": "65.4%",
-    "neutral": "22.1%"
-  },
-  "chatgpt_response": "You sound happy! How can I help you today?"
-}
-```
+![architecture](diagram/architecture.svg)
 
-### **2. Toggle Emotion Recognition**
-**Endpoint:** `/set_emotion_enabled`  
-- **Method:** `POST`  
-- **Parameters:**
-  - `enabled` — `true` or `false`  
-- **Response:**
-```json
-{
-  "enabled": true
-}
-```
+**Flow**
 
-### **3. Reset Conversation**
-**Endpoint:** `/reset_conversation`  
-- **Method:** `POST`  
-- **Parameters:**
-  - `user_id` — identifies which session to reset  
-- **Response:**
-```json
-{
-  "message": "Conversation for 'id_user' has been reset."
-}
-```
+1. Client records audio → `POST /upload_audio`.
+2. `AudioProcessor` normalises each chunk → `AudioAccumulator` sums duration.
+3. At ≥ 25 s total, `EmotionRecognizer` infers the emotion vector and stores it in `EmotionMemory` (TTL 30 s).
+4. Client sends text → `POST /chat_message`.
+5. `Orchestrator` fetches fresh emotions (if any), builds the prompt and calls either **OpenAI** or **Ollama** via `ChatAgent`.
+6. Response is returned and appended to a JSON log.
+
+---
+
+## 🧰 Tech Stack
+
+* **Python 3.11** – Flask REST API
+* **FFmpeg** – audio conversion
+* **PyTorch + Transformers** – emotion model
+* **OpenAI SDK** *or* **Ollama server** – language model
+* **Tkinter** demo GUI (optional)
 
 ---
 
@@ -146,4 +73,5 @@ We welcome contributions! Feel free to:
 ---
 
 ## 📜 License
-This project is licensed under the **MIT License**. See the `LICENSE` file for more details.
+
+Released under the **MIT License**. See `LICENSE` for details.
