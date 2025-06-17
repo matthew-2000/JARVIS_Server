@@ -1,7 +1,8 @@
-import os, json, time
+import os, json, time, math
 from datetime import datetime
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
+from collections import defaultdict
 
 # ─── Componenti locali ──────────────────────────────────────────
 from components.audio_processor     import AudioProcessor
@@ -18,8 +19,13 @@ load_dotenv()
 OPENAI_API_KEY      = os.getenv("OPENAI_API_KEY")
 ENABLE_EMO_ENDPOINT = True
 USE_LOCAL_MODEL     = False   # True → Ollama, False → OpenAI
-EMO_TTL_SEC         = 30      # “freschezza” emozioni
+EMO_TTL_SEC         = 90      # “freschezza” emozioni
 ACCUM_THRESHOLD_SEC = 25      # audio tot. prima di inferire
+
+# ─── Metriche runtime ──────────────────────────────────────────
+module_latencies = {}          # user_id → {"wav":..,"emo":..}
+audio_stats      = {}          # user_id → {"chunk_duration_ms":..}
+reset_counter    = defaultdict(int)  # user_id → count
 
 # ─── Helpers log ────────────────────────────────────────────────
 def log(msg, user_id="system"):
@@ -57,7 +63,9 @@ def upload_audio():
     log("Audio chunk ricevuto.", user_id)
 
     try:
+        t_start = time.time()
         wav_path  = audio_proc.convert_to_wav(tmp_path) or tmp_path
+        wav_ms = (time.time()-t_start)*1000
         log(f"Audio convertito in WAV. Percorso: {wav_path}", user_id)
 
         chunk_arr = audio_proc.load_audio(wav_path, 30)
@@ -75,10 +83,25 @@ def upload_audio():
         # inferenza
         full_arr = accum.pop_concat(user_id)
         log(f"Inizio inferenza emozioni su {len(full_arr)/16_000:.2f}s audio…", user_id)
+        t_emo_start = time.time()
         emotions = emo_rec.predict(full_arr)
-        emo_dict = {e: f"{p:.2%}" for e, p in emotions}
+        emo_ms = (time.time()-t_emo_start)*1000
+        chunk_ms = len(full_arr)/16_000*1000
+        probs_float = {e: p for e, p in emotions}
+        top_emotion = max(probs_float, key=probs_float.get)
+        entropy     = -sum(p * math.log2(p) for p in probs_float.values())
+        emo_dict = {
+            "probs": probs_float,
+            "top_emotion": top_emotion,
+            "entropy": entropy,
+            "emo_timestamp": datetime.utcnow().isoformat(),
+            "chunk_duration_ms": chunk_ms
+        }
         log(f"Emozioni inferite → {emo_dict}", user_id)
         emo_mem.update(user_id, emo_dict)
+
+        audio_stats[user_id] = {"chunk_duration_ms": chunk_ms}
+        module_latencies[user_id] = {"wav": wav_ms, "emo": emo_ms}
 
         return jsonify({"status": "inferred", "emotions": emo_dict})
     except Exception as e:
@@ -96,16 +119,21 @@ def chat_message():
     user_id = data.get("user_id", "default_user")
     text    = data.get("text", "").strip()
 
+    words = len(text.split())
+    chars = len(text)
+
     if not text:
         log("Campo 'text' mancante nella richiesta", user_id)
         return jsonify({"error": "Campo 'text' mancante"}), 400
 
     log(f"Prompt ricevuto: «{text}»", user_id)
     try:
-        response = orchestrator.generate_response(user_id, text)
-        log(f"Risposta LLM generata: «{response[:80]}…»", user_id)
-        save_turn(user_id, text, response)
-        return jsonify({"user_id": user_id, "response": response})
+        response_text, llm_meta = orchestrator.generate_response(user_id, text)
+        lat = module_latencies.get(user_id, {}).copy()
+        lat["llm"] = llm_meta.get("llm_latency_ms")
+        log(f"Risposta LLM generata: «{response_text[:80]}…»", user_id)
+        save_turn(user_id, text, response_text, llm_meta, words, chars, lat)
+        return jsonify({"user_id": user_id, "response": response_text})
     except Exception as e:
         log(f"Errore durante la generazione della risposta LLM: {e}", user_id)
         return jsonify({"error": str(e)}), 500
@@ -118,6 +146,7 @@ def reset_conversation():
     emo_mem.reset(user_id)
     accum.pop_concat(user_id)
     bump_session_file(user_id)
+    reset_counter[user_id] += 1
     log("Conversazione resettata.", user_id)
     return jsonify({"message": "Conversazione resettata."})
 
@@ -130,6 +159,9 @@ def bump_session_file(user_id):
         with open(filename, "r+", encoding="utf-8") as f:
             hist = json.load(f)
             hist["session_id"] = hist.get("session_id", 0) + 1
+            # Assicuriamo che esista un array per la nuova sessione
+            while len(hist.get("sessions", [])) < hist["session_id"]:
+                hist["sessions"].append([])
             f.seek(0)
             json.dump(hist, f, indent=2, ensure_ascii=False)
             f.truncate()
@@ -139,23 +171,50 @@ def bump_session_file(user_id):
             json.dump({"user_id": user_id, "session_id": 1, "sessions": [[]]}, f, indent=2, ensure_ascii=False)
         log(f"Nuovo file di sessione creato per {user_id}", user_id)
 
-def save_turn(user_id, text, bot_response):
+def save_turn(user_id, text, bot_response, llm_meta, words, chars, latencies):
     filename = f"conversations/{user_id}.json"
-    os.makedirs("conversations", exist_ok=True)
-    entry = {
-        "timestamp": datetime.now().strftime("%Y-%m-%dT%H-%M-%S"),
-        "transcription": text,
-        "emotions": emo_mem.get_recent(user_id) or "Non rilevate",
-        "llm_response": bot_response
-    }
+    now_dt   = datetime.now()
+    now_str  = now_dt.strftime("%Y-%m-%dT%H-%M-%S")
+
     if os.path.exists(filename):
         with open(filename, "r", encoding="utf-8") as f:
             hist = json.load(f)
     else:
         hist = {"user_id": user_id, "session_id": 1, "sessions": [[]]}
+
     idx = hist.get("session_id", 1) - 1
     while len(hist["sessions"]) <= idx:
         hist["sessions"].append([])
+
+    last_ts = None
+    if os.path.exists(filename):
+        with open(filename, "r", encoding="utf-8") as f:
+            tmp_hist = json.load(f)
+        sess_idx = tmp_hist.get("session_id", 1) - 1
+        if sess_idx < len(tmp_hist.get("sessions", [])) and tmp_hist["sessions"][sess_idx]:
+            last_ts = tmp_hist["sessions"][sess_idx][-1]["timestamp"]
+    delta_prev_ms = None
+    if last_ts:
+        last_dt = datetime.strptime(last_ts, "%Y-%m-%dT%H-%M-%S")
+        delta_prev_ms = int((now_dt - last_dt).total_seconds() * 1000)
+
+    turn_id = len(hist["sessions"][idx]) + 1
+
+    entry = {
+        "timestamp": now_str,
+        "session_id": hist.get("session_id", 1),
+        "turn_id": turn_id,
+        "delta_prev_ms": delta_prev_ms,
+        "transcription": text,
+        "words": words,
+        "chars": chars,
+        "emotions": emo_mem.get_recent(user_id) or "Non rilevate",
+        "llm": llm_meta,
+        "latencies_ms": latencies,
+        "reset_count": reset_counter.get(user_id, 0),
+        "llm_response": bot_response
+    }
+
     hist["sessions"][idx].append(entry)
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(hist, f, indent=2, ensure_ascii=False)

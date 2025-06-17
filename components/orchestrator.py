@@ -15,12 +15,12 @@ class Orchestrator:
         return text
 
     def generate_response(self, user_id, text):
-        # recupera emozioni “fresche” (o None)
         emotions = self.emo_memory.get_recent(user_id)
         prompt   = self._build_prompt(text, emotions)
 
         messages = self.conv_manager.get_history(user_id) + [{"role": "user", "content": prompt}]
-        response = self.chat_agent.get_response(messages)
+        response_text = self.chat_agent.get_response(messages)
+        metadata      = getattr(self.chat_agent, "get_last_metadata", lambda: {})()
 
-        self.conv_manager.add_exchange(user_id, prompt, response)
-        return response
+        self.conv_manager.add_exchange(user_id, prompt, response_text)
+        return response_text, metadata
