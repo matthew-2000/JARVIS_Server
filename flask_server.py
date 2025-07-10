@@ -17,7 +17,7 @@ from components.emotion_memory      import EmotionMemory
 # ─── Config ─────────────────────────────────────────────────────
 load_dotenv()
 OPENAI_API_KEY      = os.getenv("OPENAI_API_KEY")
-ENABLE_EMO_ENDPOINT = True
+ENABLE_EMO_ENDPOINT = True    # True → abilita endpoint emozioni
 USE_LOCAL_MODEL     = False   # True → Ollama, False → OpenAI
 EMO_TTL_SEC         = 90      # “freschezza” emozioni
 ACCUM_THRESHOLD_SEC = 25      # audio tot. prima di inferire

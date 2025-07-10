@@ -1,0 +1,307 @@
+{
+  "user_id": "N_04",
+  "session_id": 1,
+  "sessions": [
+    [
+      {
+        "timestamp": "2025-07-08T19-43-16",
+        "session_id": 1,
+        "turn_id": 1,
+        "delta_prev_ms": null,
+        "transcription": "[CONTEXT] Stiamo iniziando un’esercitazione di realtà mista sulla sintesi chimica del 2,4,6-trinitro-resorcinolo. L’utente indossa Meta Quest 3 e usa voce + gesture per manipolare pallone, becher, cilindro graduato, piastra riscaldante e reagenti virtuali. Il tuo compito è guidarlo mentre esegue, in sequenza: posizionare il pallone sul supporto; pesare 500 mg di resorcinolo dal piatto alla cartina tramite la bilancia e usando la spatola; trasferire la polvere nel pallone sul supporto; misurare 50 mL di etanolo dal becher al cilindro graduato; aggiungere il solvente dal cilindro al pallone; accendere la piastra (pulsante rosso); versare acido solforico (10ml, giallo) dalla provetta al secondo becher (vuoto); aggiungere lentamente acido nitrico (10ml, arancione) da un'altra provetta al secondo becher (con l'acido solforico); versare la miscela nitrante dal becher al pallone; osservare il cambio di colore finale e l'aumento di calore e l'avvio della reazione. Le fiamme finte indicano che la reazione è completata. Alla fine e all'inizio saluta l'utente. [END CONTEXT]\n\nCosa devo fare?",
+        "words": 160,
+        "chars": 1096,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 463,
+          "completion_tokens": 186,
+          "llm_latency_ms": 3623.4183311462402
+        },
+        "latencies_ms": {
+          "llm": 3623.4183311462402
+        },
+        "reset_count": 0,
+        "llm_response": "Ciao! Iniziamo l'esercitazione. Posiziona il pallone sul supporto. Ora, pesiamo 500 mg di resorcinolo: usa la spatola per trasferire la polvere dal piatto alla cartina e poi nel pallone. Ottimo! Adesso misura 50 mL di etanolo dal becher al cilindro graduato e aggiungilo al pallone. Accendi la piastra riscaldante premendo il pulsante rosso. Versa 10 mL di acido solforico dal becher vuoto e poi aggiungi lentamente 10 mL di acido nitrico. Infine, trasferisci la miscela nitrante nel pallone e osserva il cambiamento di colore e l’aumento di calore. Le fiamme finte indicheranno che la reazione è completata. Buon lavoro!"
+      },
+      {
+        "timestamp": "2025-07-08T19-45-01",
+        "session_id": 1,
+        "turn_id": 2,
+        "delta_prev_ms": 105472,
+        "transcription": "Cosa devo mettere nel pallone?",
+        "words": 5,
+        "chars": 30,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 665,
+          "completion_tokens": 64,
+          "llm_latency_ms": 3187.687873840332
+        },
+        "latencies_ms": {
+          "llm": 3187.687873840332
+        },
+        "reset_count": 0,
+        "llm_response": "Nel pallone devi mettere 500 mg di resorcinolo e 50 mL di etanolo. Dopo averli aggiunti, versa anche la miscela nitrante che preparerai con acido solforico e acido nitrico. Se hai bisogno di ulteriori dettagli, chiedi pure!"
+      },
+      {
+        "timestamp": "2025-07-08T19-46-13",
+        "session_id": 1,
+        "turn_id": 3,
+        "delta_prev_ms": 72663,
+        "transcription": "Qual è il supporto del pallone?",
+        "words": 6,
+        "chars": 31,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 746,
+          "completion_tokens": 84,
+          "llm_latency_ms": 2913.533926010132
+        },
+        "latencies_ms": {
+          "llm": 2913.533926010132
+        },
+        "reset_count": 0,
+        "llm_response": "Non sono sicuro, possiamo verificare insieme. In genere, il supporto del pallone è un treppiede o un supporto specifico per palloni da laboratorio, progettato per tenerli fermi durante le reazioni chimiche. Se hai un supporto visibile nell'esercitazione, utilizzalo per posizionare il pallone. Se hai domande specifiche, chiedi pure!"
+      },
+      {
+        "timestamp": "2025-07-08T19-46-53",
+        "session_id": 1,
+        "turn_id": 4,
+        "delta_prev_ms": 40699,
+        "transcription": "Cosa devo usare per inserire il resorcinolo nel pallone?",
+        "words": 9,
+        "chars": 56,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 854,
+          "completion_tokens": 51,
+          "llm_latency_ms": 1197.2191333770752
+        },
+        "latencies_ms": {
+          "llm": 1197.2191333770752
+        },
+        "reset_count": 0,
+        "llm_response": "Devi usare una spatola per trasferire il resorcinolo dal piatto alla cartina e poi nel pallone. Assicurati di farlo con attenzione per non perdere materiale. Se hai bisogno di altro, sono qui per aiutarti!"
+      },
+      {
+        "timestamp": "2025-07-08T19-47-31",
+        "session_id": 1,
+        "turn_id": 5,
+        "delta_prev_ms": 38385,
+        "transcription": "Quanti milligrammi devo inserire sulla cartina?",
+        "words": 6,
+        "chars": 47,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 925,
+          "completion_tokens": 42,
+          "llm_latency_ms": 1097.0523357391357
+        },
+        "latencies_ms": {
+          "llm": 1097.0523357391357
+        },
+        "reset_count": 0,
+        "llm_response": "Devi pesare 500 mg di resorcinolo sulla cartina. Assicurati di utilizzare la bilancia per una misurazione precisa. Se hai bisogno di assistenza, fammi sapere!"
+      },
+      {
+        "timestamp": "2025-07-08T19-48-02",
+        "session_id": 1,
+        "turn_id": 6,
+        "delta_prev_ms": 31409,
+        "transcription": "Ehm",
+        "words": 1,
+        "chars": 3,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 977,
+          "completion_tokens": 26,
+          "llm_latency_ms": 893.4509754180908
+        },
+        "latencies_ms": {
+          "llm": 893.4509754180908
+        },
+        "reset_count": 0,
+        "llm_response": "Sì? Come posso aiutarti? Se hai domande o hai bisogno di chiarimenti, non esitare a chiedere!"
+      },
+      {
+        "timestamp": "2025-07-08T19-48-34",
+        "session_id": 1,
+        "turn_id": 7,
+        "delta_prev_ms": 32771,
+        "transcription": "Cosa devo fare col pallone?",
+        "words": 5,
+        "chars": 27,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1019,
+          "completion_tokens": 54,
+          "llm_latency_ms": 1827.1679878234863
+        },
+        "latencies_ms": {
+          "llm": 1827.1679878234863
+        },
+        "reset_count": 0,
+        "llm_response": "Devi posizionare il pallone sul supporto. Dopo averlo fissato, aggiungerai prima 500 mg di resorcinolo e poi 50 mL di etanolo. Se hai bisogno di ulteriori istruzioni, chiedi pure!"
+      },
+      {
+        "timestamp": "2025-07-08T19-49-00",
+        "session_id": 1,
+        "turn_id": 8,
+        "delta_prev_ms": 26061,
+        "transcription": "di che colore è l'etanolo?",
+        "words": 5,
+        "chars": 26,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1090,
+          "completion_tokens": 33,
+          "llm_latency_ms": 896.8122005462646
+        },
+        "latencies_ms": {
+          "llm": 896.8122005462646
+        },
+        "reset_count": 0,
+        "llm_response": "L'etanolo è un liquido trasparente e incolore. Se hai altre domande sui materiali o sul procedimento, sono qui per aiutarti!"
+      },
+      {
+        "timestamp": "2025-07-08T19-50-23",
+        "session_id": 1,
+        "turn_id": 9,
+        "delta_prev_ms": 83524,
+        "transcription": "Che devo fare dopo aver inserito l'etanolo?",
+        "words": 7,
+        "chars": 43,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1143,
+          "completion_tokens": 100,
+          "llm_latency_ms": 1735.1548671722412
+        },
+        "latencies_ms": {
+          "llm": 1735.1548671722412
+        },
+        "reset_count": 0,
+        "llm_response": "Dopo aver inserito l'etanolo nel pallone, accendi la piastra riscaldante premendo il pulsante rosso. Poi, prepara la miscela nitrante versando 10 mL di acido solforico in un becher vuoto e aggiungendo lentamente 10 mL di acido nitrico. Infine, trasferisci la miscela nitrante nel pallone. Se hai bisogno di ulteriore aiuto, fammi sapere!"
+      },
+      {
+        "timestamp": "2025-07-08T19-51-03",
+        "session_id": 1,
+        "turn_id": 10,
+        "delta_prev_ms": 40977,
+        "transcription": "Come faccio la miscela nitrante?",
+        "words": 5,
+        "chars": 32,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1260,
+          "completion_tokens": 90,
+          "llm_latency_ms": 2356.4960956573486
+        },
+        "latencies_ms": {
+          "llm": 2356.4960956573486
+        },
+        "reset_count": 0,
+        "llm_response": "Per fare la miscela nitrante, versa 10 mL di acido solforico in un becher vuoto. Poi, aggiungi lentamente 10 mL di acido nitrico da un'altra provetta. Assicurati di mescolare con attenzione e indossare le protezioni appropriate. Dopo aver preparato la miscela, puoi versarla nel pallone. Se hai bisogno di ulteriori informazioni, chiedi pure!"
+      },
+      {
+        "timestamp": "2025-07-08T19-51-34",
+        "session_id": 1,
+        "turn_id": 11,
+        "delta_prev_ms": 31099,
+        "transcription": "Di che colore è l'acido nitrico?",
+        "words": 6,
+        "chars": 32,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1368,
+          "completion_tokens": 31,
+          "llm_latency_ms": 932.8680038452148
+        },
+        "latencies_ms": {
+          "llm": 932.8680038452148
+        },
+        "reset_count": 0,
+        "llm_response": "L'acido nitrico è generalmente di colore giallo chiaro o arancione. Se hai altre domande, sono qui per aiutarti!"
+      },
+      {
+        "timestamp": "2025-07-08T19-52-49",
+        "session_id": 1,
+        "turn_id": 12,
+        "delta_prev_ms": 75229,
+        "transcription": "Ho fatto la palla di fuoco.",
+        "words": 6,
+        "chars": 27,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1416,
+          "completion_tokens": 55,
+          "llm_latency_ms": 1518.9499855041504
+        },
+        "latencies_ms": {
+          "llm": 1518.9499855041504
+        },
+        "reset_count": 0,
+        "llm_response": "Ottimo lavoro! La palla di fuoco indica che la reazione è completata. Assicurati di osservare il cambiamento di colore e l'aumento di calore. Se hai bisogno di ulteriori informazioni o chiarimenti sul processo, chiedi pure!"
+      },
+      {
+        "timestamp": "2025-07-08T19-53-12",
+        "session_id": 1,
+        "turn_id": 13,
+        "delta_prev_ms": 23269,
+        "transcription": "Ciao bello.",
+        "words": 2,
+        "chars": 11,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1483,
+          "completion_tokens": 25,
+          "llm_latency_ms": 2126.260995864868
+        },
+        "latencies_ms": {
+          "llm": 2126.260995864868
+        },
+        "reset_count": 0,
+        "llm_response": "Ciao! Come posso aiutarti oggi? Se hai domande o hai bisogno di assistenza, sono qui per te!"
+      }
+    ]
+  ]
+}

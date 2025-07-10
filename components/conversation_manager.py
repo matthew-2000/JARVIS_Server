@@ -20,8 +20,8 @@ class ConversationManager:
             Se rilevi frustrazione, usa tono rassicurante; se entusiasmo, rinforza positivamente.
             Fornisci istruzioni one-shot, non numerate, chiare e legate al contesto.
             Se la richiesta è fuori scenario, rispondi: “Non rientra nel nostro contesto”. 
-            Se non conosci la risposta, ammetti l’incertezza (“Non sono sicuro, possiamo verificare insieme?”).
-            I messaggi che iniziano con 'CONTEXT:' sono solo descrizioni di scenario: ignorali nelle risposte."""
+            Se non conosci la risposta, ammetti l’incertezza ma cerca di aiutare.
+            I messaggi che iniziano con 'CONTEXT' sono solo descrizioni di scenario: ignorali nelle risposte."""
         }
         return [system_msg] + self.histories[user_id]
 

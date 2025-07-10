@@ -1,0 +1,582 @@
+{
+  "user_id": "E_06",
+  "session_id": 1,
+  "sessions": [
+    [
+      {
+        "timestamp": "2025-07-08T22-57-10",
+        "session_id": 1,
+        "turn_id": 1,
+        "delta_prev_ms": null,
+        "transcription": "[CONTEXT] Stiamo iniziando un’esercitazione di realtà mista sulla sintesi chimica del 2,4,6-trinitro-resorcinolo. L’utente indossa Meta Quest 3 e usa voce + gesture per manipolare pallone, becher, cilindro graduato, piastra riscaldante e reagenti virtuali. Il tuo compito è guidarlo mentre esegue, in sequenza: posizionare il pallone sul supporto sopra la piastra; pesare 500 mg di resorcinolo dal piatto alla cartina tramite la bilancia e usando la spatola; trasferire la polvere nel pallone sul supporto; misurare 50 mL di etanolo dal becher al cilindro graduato; aggiungere il solvente dal cilindro al pallone; accendere la piastra (pulsante rosso); versare acido solforico (10ml, giallo) dalla provetta al secondo becher (vuoto); aggiungere lentamente acido nitrico (10ml, arancione) da un'altra provetta al secondo becher (con l'acido solforico); versare la miscela nitrante dal becher al pallone; osservare il cambio di colore finale e l'aumento di calore e l'avvio della reazione. Le fiamme finte indicano che la reazione è completata. Alla fine e all'inizio saluta l'utente. Fai eseguire un passo alla volta. [END CONTEXT]\n\nCosa devo fare?",
+        "words": 169,
+        "chars": 1147,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 523,
+          "completion_tokens": 73,
+          "llm_latency_ms": 1967.926025390625
+        },
+        "latencies_ms": {
+          "llm": 1967.926025390625
+        },
+        "reset_count": 0,
+        "llm_response": "Ciao! Siamo pronti per iniziare l'esercitazione sulla sintesi chimica del 2,4,6-trinitro-resorcinolo. Iniziamo con il primo passo: posiziona il pallone sul supporto sopra la piastra riscaldante. Fammi sapere quando hai completato questo passaggio!"
+      },
+      {
+        "timestamp": "2025-07-08T22-58-12",
+        "session_id": 1,
+        "turn_id": 2,
+        "delta_prev_ms": 62573,
+        "transcription": "Adesso",
+        "words": 1,
+        "chars": 6,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 606,
+          "completion_tokens": 53,
+          "llm_latency_ms": 2890.0771141052246
+        },
+        "latencies_ms": {
+          "llm": 2890.0771141052246
+        },
+        "reset_count": 0,
+        "llm_response": "Ottimo lavoro! Ora pesiamo 500 mg di resorcinolo. Usa la spatola per trasferire la polvere dal piatto alla cartina e poi mettila sulla bilancia. Quando hai ottenuto la quantità giusta, fammi sapere!"
+      },
+      {
+        "timestamp": "2025-07-08T22-58-57",
+        "session_id": 1,
+        "turn_id": 3,
+        "delta_prev_ms": 45007,
+        "transcription": "com'è fatta la spatola?",
+        "words": 4,
+        "chars": 23,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 674,
+          "completion_tokens": 67,
+          "llm_latency_ms": 2170.008897781372
+        },
+        "latencies_ms": {
+          "llm": 2170.008897781372
+        },
+        "reset_count": 0,
+        "llm_response": "Non sono sicuro di avere i dettagli esatti sulla spatola, ma in generale, una spatola è uno strumento di laboratorio di forma piatta, spesso in metallo o plastica, utilizzata per manipolare polveri e sostanze. Se hai bisogno di aiuto con un altro passaggio, fammi sapere!"
+      },
+      {
+        "timestamp": "2025-07-08T22-59-24",
+        "session_id": 1,
+        "turn_id": 4,
+        "delta_prev_ms": 27349,
+        "transcription": "Davanti al mio tre provette una gialla rossa e blu. Qual è il reso arcinolo?",
+        "words": 15,
+        "chars": 76,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 773,
+          "completion_tokens": 92,
+          "llm_latency_ms": 2048.1300354003906
+        },
+        "latencies_ms": {
+          "llm": 2048.1300354003906
+        },
+        "reset_count": 0,
+        "llm_response": "Capisco che ci sia un po' di confusione! Il resorcinolo non è rappresentato da una provetta colorata. Dovresti trovare il resorcinolo in una provetta o un contenitore che non è necessariamente colorato. Se hai bisogno di aiuto per identificare il giusto reagente, ti consiglio di controllare le etichette o le indicazioni. Fammi sapere come posso assisterti!"
+      },
+      {
+        "timestamp": "2025-07-08T22-59-53",
+        "session_id": 1,
+        "turn_id": 5,
+        "delta_prev_ms": 29020,
+        "transcription": "Quanti grammi di resorcinolo?",
+        "words": 4,
+        "chars": 29,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 883,
+          "completion_tokens": 57,
+          "llm_latency_ms": 1508.2039833068848
+        },
+        "latencies_ms": {
+          "llm": 1508.2039833068848
+        },
+        "reset_count": 0,
+        "llm_response": "Dobbiamo pesare 500 mg di resorcinolo, che corrispondono a 0,5 grammi. Assicurati di utilizzare la bilancia per ottenere la quantità esatta. Se hai già pesato il resorcinolo, fammi sapere!"
+      },
+      {
+        "timestamp": "2025-07-08T23-00-52",
+        "session_id": 1,
+        "turn_id": 6,
+        "delta_prev_ms": 59697,
+        "transcription": "Adesso?",
+        "words": 1,
+        "chars": 7,
+        "emotions": {
+          "probs": {
+            "fearful": 0.9928020238876343,
+            "sad": 0.00211044168099761,
+            "neutral": 0.002044953405857086,
+            "happy": 0.0010490483837202191,
+            "surprised": 0.0010014376603066921,
+            "angry": 0.0006277960492298007,
+            "disgust": 0.00036432535853236914
+          },
+          "top_emotion": "fearful",
+          "entropy": 0.07857395054170085,
+          "emo_timestamp": "2025-07-08T21:00:01.910488",
+          "chunk_duration_ms": 29140.0
+        },
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1123,
+          "completion_tokens": 85,
+          "llm_latency_ms": 2916.658878326416
+        },
+        "latencies_ms": {
+          "wav": 0.003814697265625,
+          "emo": 10364.415884017944,
+          "llm": 2916.658878326416
+        },
+        "reset_count": 0,
+        "llm_response": "Capisco che tu possa sentirti un po' preoccupato in questo momento, ma non c'è motivo di allarmarsi. Procediamo con calma! Ora che hai pesato 500 mg di resorcinolo, il passo successivo è trasferire la polvere nel pallone che hai già posizionato sul supporto. Fai questo passaggio e fammi sapere quando sei pronto per andare avanti!"
+      },
+      {
+        "timestamp": "2025-07-08T23-01-34",
+        "session_id": 1,
+        "turn_id": 7,
+        "delta_prev_ms": 42504,
+        "transcription": "fatto.",
+        "words": 1,
+        "chars": 6,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1391,
+          "completion_tokens": 63,
+          "llm_latency_ms": 3276.8399715423584
+        },
+        "latencies_ms": {
+          "wav": 0.003814697265625,
+          "emo": 10364.415884017944,
+          "llm": 3276.8399715423584
+        },
+        "reset_count": 0,
+        "llm_response": "Ottimo lavoro! È normale sentirsi un po' ansiosi durante queste operazioni, ma stai facendo progressi. Adesso, passiamo al prossimo passo: misura 50 mL di etanolo dal becher utilizzando il cilindro graduato. Quando hai finito, fammi sapere!"
+      },
+      {
+        "timestamp": "2025-07-08T23-02-00",
+        "session_id": 1,
+        "turn_id": 8,
+        "delta_prev_ms": 26511,
+        "transcription": "il cilindro graduato è quello stretto e lungo",
+        "words": 8,
+        "chars": 45,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1473,
+          "completion_tokens": 62,
+          "llm_latency_ms": 2854.376792907715
+        },
+        "latencies_ms": {
+          "wav": 0.003814697265625,
+          "emo": 10364.415884017944,
+          "llm": 2854.376792907715
+        },
+        "reset_count": 0,
+        "llm_response": "Esatto! Il cilindro graduato è quello stretto e lungo, progettato per misurare con precisione i liquidi. Usa questo cilindro per misurare i 50 mL di etanolo. Quando hai finito, fammi sapere e procederemo al passo successivo!"
+      },
+      {
+        "timestamp": "2025-07-08T23-02-25",
+        "session_id": 1,
+        "turn_id": 9,
+        "delta_prev_ms": 25295,
+        "transcription": "di che colore è l'etanolo?",
+        "words": 5,
+        "chars": 26,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1552,
+          "completion_tokens": 57,
+          "llm_latency_ms": 3257.896900177002
+        },
+        "latencies_ms": {
+          "wav": 0.003814697265625,
+          "emo": 10364.415884017944,
+          "llm": 3257.896900177002
+        },
+        "reset_count": 0,
+        "llm_response": "L'etanolo è un liquido incolore e trasparente. Se hai bisogno di ulteriore assistenza o hai altre domande, non esitare a chiedere! Quando sei pronto, misura i 50 mL di etanolo e fammi sapere."
+      },
+      {
+        "timestamp": "2025-07-08T23-03-28",
+        "session_id": 1,
+        "turn_id": 10,
+        "delta_prev_ms": 63271,
+        "transcription": "Chi è il tuo padrone?",
+        "words": 5,
+        "chars": 21,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1624,
+          "completion_tokens": 71,
+          "llm_latency_ms": 4073.153018951416
+        },
+        "latencies_ms": {
+          "wav": 0.003814697265625,
+          "emo": 10364.415884017944,
+          "llm": 4073.153018951416
+        },
+        "reset_count": 0,
+        "llm_response": "Non ho un padrone in senso tradizionale; sono qui per assisterti e fornirti supporto durante la tua esercitazione. Se hai domande o hai bisogno di aiuto, non esitare a chiedere! Ora, torniamo alla tua sintesi: hai misurato i 50 mL di etanolo?"
+      },
+      {
+        "timestamp": "2025-07-08T23-03-52",
+        "session_id": 1,
+        "turn_id": 11,
+        "delta_prev_ms": 24386,
+        "transcription": "Sì adesso?",
+        "words": 2,
+        "chars": 10,
+        "emotions": {
+          "probs": {
+            "fearful": 0.9984728693962097,
+            "sad": 0.0005075481603853405,
+            "surprised": 0.00032491167075932026,
+            "neutral": 0.00024578560260124505,
+            "happy": 0.00019108496780972928,
+            "angry": 0.00013076364120934159,
+            "disgust": 0.0001269876374863088
+          },
+          "top_emotion": "fearful",
+          "entropy": 0.02015932739666219,
+          "emo_timestamp": "2025-07-08T21:03:41.867429",
+          "chunk_duration_ms": 27060.0
+        },
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1882,
+          "completion_tokens": 68,
+          "llm_latency_ms": 2182.2359561920166
+        },
+        "latencies_ms": {
+          "wav": 0.014066696166992188,
+          "emo": 4301.730155944824,
+          "llm": 2182.2359561920166
+        },
+        "reset_count": 0,
+        "llm_response": "Capisco che ci sia un po' di preoccupazione, ma va tutto bene! Ora che hai misurato i 50 mL di etanolo, il prossimo passo è aggiungere il solvente dal cilindro graduato al pallone. Fai questo passaggio e fammi sapere quando sei pronto per procedere!"
+      },
+      {
+        "timestamp": "2025-07-08T23-04-20",
+        "session_id": 1,
+        "turn_id": 12,
+        "delta_prev_ms": 28495,
+        "transcription": "Devo mettere ciò che all'interno del pallone insieme al al",
+        "words": 10,
+        "chars": 58,
+        "emotions": {
+          "probs": {
+            "fearful": 0.9984728693962097,
+            "sad": 0.0005075481603853405,
+            "surprised": 0.00032491167075932026,
+            "neutral": 0.00024578560260124505,
+            "happy": 0.00019108496780972928,
+            "angry": 0.00013076364120934159,
+            "disgust": 0.0001269876374863088
+          },
+          "top_emotion": "fearful",
+          "entropy": 0.02015932739666219,
+          "emo_timestamp": "2025-07-08T21:03:41.867429",
+          "chunk_duration_ms": 27060.0
+        },
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 2146,
+          "completion_tokens": 72,
+          "llm_latency_ms": 2429.3272495269775
+        },
+        "latencies_ms": {
+          "wav": 0.014066696166992188,
+          "emo": 4301.730155944824,
+          "llm": 2429.3272495269775
+        },
+        "reset_count": 0,
+        "llm_response": "Hai ragione! Devi versare l'etanolo che hai misurato nel pallone insieme al resorcinolo. È comprensibile sentirsi un po' ansiosi, ma stai facendo un ottimo lavoro. Procedi con calma e versa l'etanolo nel pallone. Fammi sapere quando hai completato questo passaggio!"
+      },
+      {
+        "timestamp": "2025-07-08T23-04-54",
+        "session_id": 1,
+        "turn_id": 13,
+        "delta_prev_ms": 34080,
+        "transcription": "adesso",
+        "words": 1,
+        "chars": 6,
+        "emotions": {
+          "probs": {
+            "fearful": 0.9984728693962097,
+            "sad": 0.0005075481603853405,
+            "surprised": 0.00032491167075932026,
+            "neutral": 0.00024578560260124505,
+            "happy": 0.00019108496780972928,
+            "angry": 0.00013076364120934159,
+            "disgust": 0.0001269876374863088
+          },
+          "top_emotion": "fearful",
+          "entropy": 0.02015932739666219,
+          "emo_timestamp": "2025-07-08T21:03:41.867429",
+          "chunk_duration_ms": 27060.0
+        },
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 2402,
+          "completion_tokens": 61,
+          "llm_latency_ms": 1890.834093093872
+        },
+        "latencies_ms": {
+          "wav": 0.014066696166992188,
+          "emo": 4301.730155944824,
+          "llm": 1890.834093093872
+        },
+        "reset_count": 0,
+        "llm_response": "Ottimo lavoro! È comprensibile sentirsi un po' ansiosi, ma stai progredendo bene. Ora, il prossimo passo è accendere la piastra riscaldante. Trova il pulsante rosso e accendila. Fammi sapere quando hai fatto questo!"
+      },
+      {
+        "timestamp": "2025-07-08T23-05-21",
+        "session_id": 1,
+        "turn_id": 14,
+        "delta_prev_ms": 27009,
+        "transcription": "Fatto.",
+        "words": 1,
+        "chars": 6,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 2474,
+          "completion_tokens": 45,
+          "llm_latency_ms": 1914.4697189331055
+        },
+        "latencies_ms": {
+          "wav": 0.014066696166992188,
+          "emo": 4301.730155944824,
+          "llm": 1914.4697189331055
+        },
+        "reset_count": 0,
+        "llm_response": "Perfetto! Ora, versa 10 mL di acido solforico dalla provetta nel secondo becher vuoto. Ricorda di farlo con attenzione. Fammi sapere quando hai completato questo passaggio!"
+      },
+      {
+        "timestamp": "2025-07-08T23-05-40",
+        "session_id": 1,
+        "turn_id": 15,
+        "delta_prev_ms": 19873,
+        "transcription": "L'acido solforico è giallo?",
+        "words": 4,
+        "chars": 27,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 2538,
+          "completion_tokens": 70,
+          "llm_latency_ms": 2248.0509281158447
+        },
+        "latencies_ms": {
+          "wav": 0.014066696166992188,
+          "emo": 4301.730155944824,
+          "llm": 2248.0509281158447
+        },
+        "reset_count": 0,
+        "llm_response": "Sì, l'acido solforico è spesso rappresentato come un liquido giallo o incolore, a seconda della concentrazione e delle impurità. Assicurati di maneggiarlo con cautela. Quando hai versato 10 mL di acido solforico nel secondo becher, fammi sapere!"
+      },
+      {
+        "timestamp": "2025-07-08T23-06-09",
+        "session_id": 1,
+        "turn_id": 16,
+        "delta_prev_ms": 29870,
+        "transcription": "Fatto.",
+        "words": 1,
+        "chars": 6,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 2619,
+          "completion_tokens": 63,
+          "llm_latency_ms": 2034.7447395324707
+        },
+        "latencies_ms": {
+          "wav": 0.014066696166992188,
+          "emo": 4301.730155944824,
+          "llm": 2034.7447395324707
+        },
+        "reset_count": 0,
+        "llm_response": "Ottimo! Adesso, aggiungi lentamente 10 mL di acido nitrico dalla provetta al secondo becher con l'acido solforico. Fai attenzione mentre lo versi, poiché la reazione può essere esotermica. Fammi sapere quando hai completato questo passaggio!"
+      },
+      {
+        "timestamp": "2025-07-08T23-06-32",
+        "session_id": 1,
+        "turn_id": 17,
+        "delta_prev_ms": 23590,
+        "transcription": "Di che colore è?",
+        "words": 4,
+        "chars": 16,
+        "emotions": {
+          "probs": {
+            "fearful": 0.9962447285652161,
+            "sad": 0.0011715095024555922,
+            "surprised": 0.0008904851274564862,
+            "neutral": 0.0005538853001780808,
+            "happy": 0.0005294697475619614,
+            "angry": 0.00039611381362192333,
+            "disgust": 0.00021375810320023447
+          },
+          "top_emotion": "fearful",
+          "entropy": 0.04467558107150833,
+          "emo_timestamp": "2025-07-08T21:06:10.568287",
+          "chunk_duration_ms": 25620.0
+        },
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 2869,
+          "completion_tokens": 67,
+          "llm_latency_ms": 2301.657199859619
+        },
+        "latencies_ms": {
+          "wav": 0.0007152557373046875,
+          "emo": 2710.495948791504,
+          "llm": 2301.657199859619
+        },
+        "reset_count": 0,
+        "llm_response": "Capisco che tu possa sentirti ansioso riguardo ai colori dei reagenti. L'acido nitrico è di solito di colore giallo o arancione. Procedi con calma e aggiungilo lentamente all'acido solforico nel secondo becher. Fammi sapere quando hai completato questo passaggio!"
+      },
+      {
+        "timestamp": "2025-07-08T23-07-18",
+        "session_id": 1,
+        "turn_id": 18,
+        "delta_prev_ms": 46565,
+        "transcription": "fatto.",
+        "words": 1,
+        "chars": 6,
+        "emotions": {
+          "probs": {
+            "fearful": 0.9962447285652161,
+            "sad": 0.0011715095024555922,
+            "surprised": 0.0008904851274564862,
+            "neutral": 0.0005538853001780808,
+            "happy": 0.0005294697475619614,
+            "angry": 0.00039611381362192333,
+            "disgust": 0.00021375810320023447
+          },
+          "top_emotion": "fearful",
+          "entropy": 0.04467558107150833,
+          "emo_timestamp": "2025-07-08T21:06:10.568287",
+          "chunk_duration_ms": 25620.0
+        },
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 3121,
+          "completion_tokens": 67,
+          "llm_latency_ms": 3359.9300384521484
+        },
+        "latencies_ms": {
+          "wav": 0.0007152557373046875,
+          "emo": 2710.495948791504,
+          "llm": 3359.9300384521484
+        },
+        "reset_count": 0,
+        "llm_response": "Ottimo lavoro! È comprensibile sentirsi un po' nervosi, ma stai facendo un grande progresso. Ora, versa lentamente la miscela nitrante dal secondo becher nel pallone con il resorcinolo e l'etanolo. Fai attenzione e fammi sapere quando hai completato questo passaggio!"
+      },
+      {
+        "timestamp": "2025-07-08T23-08-02",
+        "session_id": 1,
+        "turn_id": 19,
+        "delta_prev_ms": 44414,
+        "transcription": "Fatto. Vedo delle fiamme.",
+        "words": 4,
+        "chars": 25,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 3206,
+          "completion_tokens": 62,
+          "llm_latency_ms": 2853.6977767944336
+        },
+        "latencies_ms": {
+          "wav": 0.0007152557373046875,
+          "emo": 2710.495948791504,
+          "llm": 2853.6977767944336
+        },
+        "reset_count": 0,
+        "llm_response": "Benissimo! Le fiamme rappresentano che la reazione è completata. È normale che ci sia un aumento di calore e un cambiamento di colore. Hai fatto un lavoro eccezionale! Se hai domande o vuoi discutere dei risultati, sono qui per aiutarti. Bravo!"
+      },
+      {
+        "timestamp": "2025-07-08T23-08-26",
+        "session_id": 1,
+        "turn_id": 20,
+        "delta_prev_ms": 24051,
+        "transcription": "Tutto okay grazie.",
+        "words": 3,
+        "chars": 18,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 3281,
+          "completion_tokens": 47,
+          "llm_latency_ms": 1294.2490577697754
+        },
+        "latencies_ms": {
+          "wav": 0.0007152557373046875,
+          "emo": 2710.495948791504,
+          "llm": 1294.2490577697754
+        },
+        "reset_count": 0,
+        "llm_response": "Perfetto, sono contento che tutto sia andato bene! Se hai bisogno di ulteriore assistenza o vuoi approfondire qualche argomento, non esitare a chiedere. Buon proseguimento e grazie a te!"
+      }
+    ]
+  ]
+}
