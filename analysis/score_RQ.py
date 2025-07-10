@@ -4,7 +4,7 @@ Minimal confirmatory analysis for MR-assistant experiment
 (RQ1–RQ4, nessuna correzione multipla)
 
 RQ1 ▸ PQ
-RQ2 ▸ NASA_TLX  +  Total_Δ (SSQ)
+RQ2 ▸ NASA_TLX  +  SSQ_Total_Δ  (SSQ)
 RQ3 ▸ SUS       +  SASSI_global
 RQ4 ▸ TCT       +  Turns
 author: Matteo Ercolino – 2025-07-09
@@ -15,7 +15,7 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 from scipy import stats
-import matplotlib.pyplot as plt
+from typing import List
 
 # ------------------------------------------------------------
 # 1. Helper
@@ -34,6 +34,10 @@ def cliffs_delta(a, b):
     less = sum(x<y for x in a for y in b)
     return (more-less)/(len(a)*len(b))
 
+def reverse(series: pd.Series, max_val: int = 7):
+    """Reverse‑score Likert series: 1 ↔ max_val."""
+    return series.apply(lambda x: np.nan if pd.isna(x) else (max_val + 1 - x))
+
 warnings.filterwarnings("ignore", message="scipy.stats.shapiro: Input data has range zero*")
 
 # ------------------------------------------------------------
@@ -44,6 +48,24 @@ post = pd.read_csv("Questionario post-task.csv")
 
 idcol = "ID Partecipante (fornito dallo sperimentatore):"
 post["GROUP"] = pre["GROUP"] = pre[idcol].str[0].map({"E":"EMO","N":"NEU"})
+
+# ---------------------------------------------------------------------------
+# 2. Reverse‑scoring (SASSI short‑form)
+# ---------------------------------------------------------------------------
+NEG_SASSI: List[str] = [
+    "Ho dovuto pensare molto",             # CD1
+    "richiedeva molta concentrazione",     # CD2
+    "Mi sono sentito frustrato",           # A1
+    "è stata irritante",                   # A2
+    "Ho trovato difficile usare",          # A3
+]
+
+for kw in NEG_SASSI:
+    col = next((c for c in post.columns if kw.lower() in c.lower()), None)
+    if col:
+        post[col] = reverse(post[col], max_val=7)
+    else:
+        print(f"⚠ Item SASSI «{kw}…» non trovato: controlla spelling nel CSV.")
 
 # ------------------------------------------------------------
 # 3. Score PQ • NASA-TLX • SUS • SASSI_global
@@ -56,9 +78,17 @@ post["NASA_TLX"] = post.iloc[:,26:32].astype(float).mean(axis=1)
 
 # SUS (robusto)
 SUS_ITEMS = [
-    "Utilizzerei spesso", "inutile", "facile da usare", "supporto di un tecnico",
-    "incoerenze", "imparerebbe a usarlo", "macchinoso", "sentito sicuro", "imparare molte cose"
+    "Utilizzerei spesso",            # 1
+    "inutile",                       # 2 ← negativo
+    "facile da usare",              # 3
+    "supporto di un tecnico",       # 4 ← negativo
+    "incoerenze",                   # 6 ← negativo
+    "imparerebbe a usarlo",         # 7
+    "macchinoso",                   # 8 ← negativo
+    "sentito sicuro",               # 9
+    "imparare molte cose"           #10 ← negativo
 ]
+NEGATIVE_IDX = {1, 3, 4, 6, 8}  # ← indici Python 0-based (item 2,4,6,8,10)
 def sus(row):
     contrib = present = 0
     for i, kw in enumerate(SUS_ITEMS):
@@ -66,7 +96,7 @@ def sus(row):
         if col and not pd.isna(row[col]):
             present += 1
             val = row[col]
-            contrib += (val-1) if i%2==0 else (5-val)
+            contrib += (val - 1) if i not in NEGATIVE_IDX else (5 - val)
     return np.nan if present==0 else (contrib/(present*4))*100
 post["SUS"] = post.apply(sus, axis=1)
 
@@ -128,15 +158,34 @@ SSQ_ITEMS = [
     "Vertigini (occhi aperti).", "Vertigini (occhi chiusi).", "Senso di giramento di testa.",
     "Sensazione di stomaco “in movimento”.", "Sensazione di dover ruttare."
 ]
-weights = 3.74  # fattore per il totale
 
-def ssq_total(df):
-    # Coerce a numerico; valori non convertibili → NaN → trattati come 0 nel sum
-    return df[SSQ_ITEMS].apply(pd.to_numeric, errors="coerce").sum(axis=1) * weights
+# Indici (0-based)
+SCALES = {
+    "Nausea":      [0, 5, 6, 7, 8, 14, 15],
+    "Oculomotor":  [1, 2, 3, 4, 8, 9,10],
+    "Disorient.":  [0, 1, 2,11,12,13,14],
+    "SSQ_Total":    list(range(16))
+}
+WEIGHTS = {
+    "Nausea": 9.54, "Oculomotor": 7.58, "Disorient.": 13.92, "SSQ_Total": 3.74
+}
 
-ssq_pre_total  = ssq_total(pre)
-ssq_post_total = ssq_total(post)
-post["Total_Δ"] = ssq_post_total - ssq_pre_total
+def compute_ssq_scores(df):
+    df_items = df[SSQ_ITEMS].apply(pd.to_numeric, errors="coerce").fillna(0)
+
+    scores = {}
+    for scale, idxs in SCALES.items():
+        raw_sum = df_items.iloc[:, idxs].sum(axis=1)
+        scores[scale] = raw_sum * WEIGHTS[scale]
+    return pd.DataFrame(scores)
+
+# Calcolo
+ssq_pre  = compute_ssq_scores(pre)
+ssq_post = compute_ssq_scores(post)
+
+# Δ tra pre e post
+ssq_delta = ssq_post - ssq_pre
+post = post.join(ssq_delta.add_suffix("_Δ"))
 
 # ------------------------------------------------------------
 # 5. Objective metrics from logs
@@ -156,7 +205,7 @@ post = post.merge(perf, left_on=idcol, right_on="ID", how="left")
 # ------------------------------------------------------------
 # 6. Stats (NO multiple-comparison correction)
 # ------------------------------------------------------------
-VARLIST = ["PQ","NASA_TLX","Total_Δ","SUS","SASSI_global","TCT","Turns"]
+VARLIST = ["PQ","NASA_TLX","SSQ_Total_Δ","SUS","SASSI_global","TCT","Turns"]
 out=[]
 for var in VARLIST:
     a = post[post.GROUP=="EMO"][var].dropna().to_numpy()

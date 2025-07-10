@@ -63,7 +63,7 @@ FIG_DIR.mkdir(exist_ok=True)
 VARLIST = [
     "PQ",
     "NASA_TLX",
-    "Total_Δ",
+    "SSQ_Total_Δ",
     "SUS",
     "SASSI_global",
     "TCT",
