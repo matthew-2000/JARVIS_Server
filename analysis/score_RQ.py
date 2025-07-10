@@ -142,7 +142,7 @@ post["Total_Δ"] = ssq_post_total - ssq_pre_total
 # 5. Objective metrics from logs
 # ------------------------------------------------------------
 rows=[]
-for path in glob.glob("*.json"):
+for path in glob.glob("conversations/*.json"):
     with open(path,encoding="utf-8") as f: js = json.load(f)
     uid = js.get("user_id", os.path.basename(path).split(".")[0])
     for sess in js.get("sessions",[]):
@@ -173,6 +173,8 @@ for var in VARLIST:
                     test=test,stat=stat,p=p,effsize=eff))
 res = pd.DataFrame(out)
 res.to_csv("stats_summary_RQ.csv",index=False)
+# ⇢  Salva anche il post-task già scored
+post.to_csv("post_scored.csv", index=False)
 print("✓ Solo RQ1–RQ4 analizzate → risultati in stats_summary_RQ.csv")
 
 # ------------------------------------------------------------
