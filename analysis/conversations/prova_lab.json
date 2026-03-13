@@ -1,0 +1,95 @@
+{
+  "user_id": "prova_lab",
+  "session_id": 1,
+  "sessions": [
+    [
+      {
+        "timestamp": "2025-09-23T15-06-09",
+        "session_id": 1,
+        "turn_id": 1,
+        "delta_prev_ms": null,
+        "transcription": "[CONTEXT] Stiamo iniziando un’esercitazione di realtà mista sulla sintesi chimica del 2,4,6-trinitro-resorcinolo. L’utente indossa Meta Quest 3 e usa voce + gesture per manipolare pallone, becher, cilindro graduato, piastra riscaldante e reagenti virtuali. Il tuo compito è guidarlo mentre esegue, in sequenza: posizionare il pallone sul supporto sopra la piastra; pesare 500 mg di resorcinolo dal piatto alla cartina tramite la bilancia e usando la spatola; trasferire la polvere nel pallone sul supporto; misurare 50 mL di etanolo dal becher al cilindro graduato; aggiungere il solvente dal cilindro al pallone; accendere la piastra (pulsante rosso); versare acido solforico (10ml, giallo) dalla provetta al secondo becher (vuoto); aggiungere lentamente acido nitrico (10ml, arancione) da un'altra provetta al secondo becher (con l'acido solforico); versare la miscela nitrante dal becher al pallone; osservare il cambio di colore finale e l'aumento di calore e l'avvio della reazione. Le fiamme finte indicano che la reazione è completata. Alla fine e all'inizio saluta l'utente. Fai eseguire un passo alla volta. [END CONTEXT]\n\nÈ una lissoide però. Eh?",
+        "words": 171,
+        "chars": 1156,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 532,
+          "completion_tokens": 59,
+          "llm_latency_ms": 8209.047079086304
+        },
+        "latencies_ms": {
+          "llm": 8209.047079086304
+        },
+        "reset_count": 0,
+        "llm_response": "Non rientra nel nostro contesto. Ma sono qui per aiutarti con la tua esercitazione sulla sintesi chimica! Pronto a iniziare? Posiziona il pallone sul supporto sopra la piastra riscaldante. Fammi sapere quando hai fatto!"
+      },
+      {
+        "timestamp": "2025-09-23T15-07-18",
+        "session_id": 1,
+        "turn_id": 2,
+        "delta_prev_ms": 69778,
+        "transcription": "Ciao",
+        "words": 1,
+        "chars": 4,
+        "emotions": {
+          "probs": {
+            "fearful": 0.8561617136001587,
+            "surprised": 0.1107521653175354,
+            "sad": 0.02595526911318302,
+            "neutral": 0.0037347006145864725,
+            "happy": 0.0016377363353967667,
+            "angry": 0.0009947720682248473,
+            "disgust": 0.0007636840455234051
+          },
+          "top_emotion": "fearful",
+          "entropy": 0.7432438203902662,
+          "emo_timestamp": "2025-09-23T13:07:02.247432",
+          "chunk_duration_ms": 31390.0
+        },
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 773,
+          "completion_tokens": 73,
+          "llm_latency_ms": 3261.9102001190186
+        },
+        "latencies_ms": {
+          "wav": 0.0069141387939453125,
+          "emo": 8671.623945236206,
+          "llm": 3261.9102001190186
+        },
+        "reset_count": 0,
+        "llm_response": "Ciao! Capisco che potresti sentirti un po' preoccupato, ma non ti preoccupare, siamo qui insieme e farò del mio meglio per guidarti. Iniziamo la nostra esercitazione. Posiziona il pallone sul supporto sopra la piastra riscaldante e fammi sapere quando sei pronto!"
+      },
+      {
+        "timestamp": "2025-09-23T15-11-07",
+        "session_id": 1,
+        "turn_id": 3,
+        "delta_prev_ms": 229416,
+        "transcription": "[CONTEXT] Stiamo iniziando un’esercitazione di realtà mista sulla sintesi chimica del 2,4,6-trinitro-resorcinolo. L’utente indossa Meta Quest 3 e usa voce + gesture per manipolare pallone, becher, cilindro graduato, piastra riscaldante e reagenti virtuali. Il tuo compito è guidarlo mentre esegue, in sequenza: posizionare il pallone sul supporto sopra la piastra; pesare 500 mg di resorcinolo dal piatto alla cartina tramite la bilancia e usando la spatola; trasferire la polvere nel pallone sul supporto; misurare 50 mL di etanolo dal becher al cilindro graduato; aggiungere il solvente dal cilindro al pallone; accendere la piastra (pulsante rosso); versare acido solforico (10ml, giallo) dalla provetta al secondo becher (vuoto); aggiungere lentamente acido nitrico (10ml, arancione) da un'altra provetta al secondo becher (con l'acido solforico); versare la miscela nitrante dal becher al pallone; osservare il cambio di colore finale e l'aumento di calore e l'avvio della reazione. Le fiamme finte indicano che la reazione è completata. Alla fine e all'inizio saluta l'utente. Fai eseguire un passo alla volta. [END CONTEXT]\n\nSei sul fuoco togliti.",
+        "words": 170,
+        "chars": 1154,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1193,
+          "completion_tokens": 65,
+          "llm_latency_ms": 2567.5721168518066
+        },
+        "latencies_ms": {
+          "wav": 0.0069141387939453125,
+          "emo": 8671.623945236206,
+          "llm": 2567.5721168518066
+        },
+        "reset_count": 0,
+        "llm_response": "Non rientra nel nostro contesto. Ma non preoccuparti, siamo qui per affrontare insieme l'esercitazione sulla sintesi chimica! Sei pronto a continuare? Posiziona il pallone sul supporto sopra la piastra riscaldante e fammi sapere quando hai finito!"
+      }
+    ]
+  ]
+}

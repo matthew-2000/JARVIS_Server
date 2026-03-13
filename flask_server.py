@@ -153,7 +153,7 @@ def reset_conversation():
 # ─── Persistenza JSON ───────────────────────────────────────────
 def bump_session_file(user_id):
     log(f"Verifica file di sessione per {user_id}...", user_id)
-    filename = f"conversations/{user_id}.json"
+    filename = f"analysis/conversations/{user_id}.json"
     os.makedirs("conversations", exist_ok=True)
     if os.path.exists(filename):
         with open(filename, "r+", encoding="utf-8") as f:
@@ -172,7 +172,7 @@ def bump_session_file(user_id):
         log(f"Nuovo file di sessione creato per {user_id}", user_id)
 
 def save_turn(user_id, text, bot_response, llm_meta, words, chars, latencies):
-    filename = f"conversations/{user_id}.json"
+    filename = f"analysis/conversations/{user_id}.json"
     now_dt   = datetime.now()
     now_str  = now_dt.strftime("%Y-%m-%dT%H-%M-%S")
 
