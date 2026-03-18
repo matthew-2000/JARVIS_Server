@@ -82,13 +82,14 @@ SUS_ITEMS = [
     "inutile",                       # 2 ← negativo
     "facile da usare",              # 3
     "supporto di un tecnico",       # 4 ← negativo
-    "incoerenze",                   # 6 ← negativo
-    "imparerebbe a usarlo",         # 7
-    "macchinoso",                   # 8 ← negativo
-    "sentito sicuro",               # 9
-    "imparare molte cose"           #10 ← negativo
+    "ben integrate",               # 5
+    "incoerenze",                  # 6 ← negativo
+    "imparerebbe a usarlo",        # 7
+    "macchinoso",                  # 8 ← negativo
+    "sentito sicuro",              # 9
+    "imparare molte cose"          #10 ← negativo
 ]
-NEGATIVE_IDX = {1, 3, 4, 6, 8}  # ← indici Python 0-based (item 2,4,6,8,10)
+NEGATIVE_IDX = {1, 3, 5, 7, 9}  # ← indici Python 0-based (item 2,4,6,8,10)
 def sus(row):
     contrib = present = 0
     for i, kw in enumerate(SUS_ITEMS):
