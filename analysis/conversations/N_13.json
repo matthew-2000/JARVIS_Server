@@ -1,0 +1,376 @@
+{
+  "user_id": "N_13",
+  "session_id": 1,
+  "sessions": [
+    [
+      {
+        "timestamp": "2025-08-07T19-53-32",
+        "session_id": 1,
+        "turn_id": 1,
+        "delta_prev_ms": null,
+        "transcription": "[CONTEXT] Stiamo iniziando un’esercitazione di realtà mista sulla sintesi chimica del 2,4,6-trinitro-resorcinolo. L’utente indossa Meta Quest 3 e usa voce + gesture per manipolare pallone, becher, cilindro graduato, piastra riscaldante e reagenti virtuali. Il tuo compito è guidarlo mentre esegue, in sequenza: posizionare il pallone sul supporto; pesare 500 mg di resorcinolo dal piatto alla cartina tramite la bilancia e usando la spatola; trasferire la polvere nel pallone sul supporto; misurare 50 mL di etanolo dal becher al cilindro graduato; aggiungere il solvente dal cilindro al pallone; accendere la piastra a 60 °C (pulsante rosso); versare acido solforico (10ml, giallo) dalla provetta al secondo becher (vuoto); aggiungere lentamente acido nitrico (10ml, arancione) da un'altra provetta al secondo becher (con l'acido solforico); versare la miscela nitrante dal becher al pallone; osservare il cambio di colore finale e l'aumento di calore e l'avvio della reazione. Le fiamme finte indicano che la reazione è completata. Alla fine e all'inizio saluta l'utente. [END CONTEXT]\n\nCosa devo fare?",
+        "words": 163,
+        "chars": 1104,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 468,
+          "completion_tokens": 87,
+          "llm_latency_ms": 2789.919879
+        },
+        "latencies_ms": {
+          "llm": 2789.919879
+        },
+        "reset_count": 0,
+        "llm_response": "Ciao! Iniziamo l'esercitazione. Prima di tutto, prendi il pallone e posizionalo sul supporto. Quando sei pronto, pesiamo 500 mg di resorcinolo. Usa la spatola per trasferire la polvere dal piatto alla cartina. Poi, metti la polvere nel pallone sul supporto. Fammi sapere quando hai completato questi passaggi!"
+      },
+      {
+        "timestamp": "2025-08-07T19-54-41",
+        "session_id": 1,
+        "turn_id": 2,
+        "delta_prev_ms": 69127,
+        "transcription": "Mi descrivi il pallone?",
+        "words": 4,
+        "chars": 23,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 570,
+          "completion_tokens": 9,
+          "llm_latency_ms": 572.441033
+        },
+        "latencies_ms": {
+          "llm": 572.441033
+        },
+        "reset_count": 0,
+        "llm_response": "Non rientra nel nostro contesto."
+      },
+      {
+        "timestamp": "2025-08-07T19-54-57",
+        "session_id": 1,
+        "turn_id": 3,
+        "delta_prev_ms": 15907,
+        "transcription": "Mi mi specifichi qual è il pallone?",
+        "words": 7,
+        "chars": 35,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 597,
+          "completion_tokens": 70,
+          "llm_latency_ms": 5612.542129
+        },
+        "latencies_ms": {
+          "llm": 5612.542129
+        },
+        "reset_count": 0,
+        "llm_response": "Non sono sicuro, possiamo verificare insieme. In genere, il pallone da usare è un pallone da laboratorio, di forma sferica, con un collo lungo per facilitare il mescolamento dei reagenti. Se hai dubbi, controlla gli strumenti virtuali che stai usando. Fammi sapere come posso aiutarti!"
+      },
+      {
+        "timestamp": "2025-08-07T19-55-37",
+        "session_id": 1,
+        "turn_id": 4,
+        "delta_prev_ms": 40303,
+        "transcription": "Cosa devo inserire all'interno del pallone?",
+        "words": 6,
+        "chars": 43,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 687,
+          "completion_tokens": 48,
+          "llm_latency_ms": 1907.725034
+        },
+        "latencies_ms": {
+          "llm": 1907.725034
+        },
+        "reset_count": 0,
+        "llm_response": "Devi inserire 500 mg di resorcinolo all'interno del pallone. Dopo aver pesato la polvere, trasferiscila nel pallone sul supporto. Fammi sapere quando hai completato questo passaggio!"
+      },
+      {
+        "timestamp": "2025-08-07T19-56-02",
+        "session_id": 1,
+        "turn_id": 5,
+        "delta_prev_ms": 25405,
+        "transcription": "Come devo fare?",
+        "words": 3,
+        "chars": 15,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 747,
+          "completion_tokens": 79,
+          "llm_latency_ms": 3480.055045
+        },
+        "latencies_ms": {
+          "llm": 3480.055045
+        },
+        "reset_count": 0,
+        "llm_response": "Prendi la spatola e usa la bilancia per pesare 500 mg di resorcinolo. Una volta ottenuto il peso corretto, utilizza la spatola per trasferire la polvere dalla cartina al pallone che hai posizionato sul supporto. Assicurati di non lasciare residui sulla cartina. Quando hai finito, fammi sapere!"
+      },
+      {
+        "timestamp": "2025-08-07T19-57-33",
+        "session_id": 1,
+        "turn_id": 6,
+        "delta_prev_ms": 90717,
+        "transcription": "ho fatto.",
+        "words": 2,
+        "chars": 9,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 837,
+          "completion_tokens": 68,
+          "llm_latency_ms": 3043.846555
+        },
+        "latencies_ms": {
+          "llm": 3043.846555
+        },
+        "reset_count": 0,
+        "llm_response": "Ottimo lavoro! Ora, prendi il becher e misura 50 mL di etanolo usando il cilindro graduato. Una volta che hai la misura corretta, aggiungi l'etanolo dal cilindro al pallone con il resorcinolo. Fammi sapere quando hai completato anche questo passaggio!"
+      },
+      {
+        "timestamp": "2025-08-07T19-57-53",
+        "session_id": 1,
+        "turn_id": 7,
+        "delta_prev_ms": 20506,
+        "transcription": "Mi descrive il baker?",
+        "words": 4,
+        "chars": 21,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 919,
+          "completion_tokens": 9,
+          "llm_latency_ms": 1061.260567
+        },
+        "latencies_ms": {
+          "llm": 1061.260567
+        },
+        "reset_count": 0,
+        "llm_response": "Non rientra nel nostro contesto."
+      },
+      {
+        "timestamp": "2025-08-07T19-58-04",
+        "session_id": 1,
+        "turn_id": 8,
+        "delta_prev_ms": 10709,
+        "transcription": "mi specifici specifichi la forma del maker",
+        "words": 7,
+        "chars": 42,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 945,
+          "completion_tokens": 66,
+          "llm_latency_ms": 3147.670166
+        },
+        "latencies_ms": {
+          "llm": 3147.670166
+        },
+        "reset_count": 0,
+        "llm_response": "Non sono sicuro, possiamo verificare insieme. In generale, un becher è un contenitore cilindrico con un fondo piatto e un beccuccio per versare. Ha segni graduati sul lato per misurare il volume dei liquidi. Se hai bisogno di ulteriori dettagli, fammi sapere!"
+      },
+      {
+        "timestamp": "2025-08-07T19-58-49",
+        "session_id": 1,
+        "turn_id": 9,
+        "delta_prev_ms": 44524,
+        "transcription": "cosa devo aggiungere al beaker?",
+        "words": 5,
+        "chars": 31,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1028,
+          "completion_tokens": 63,
+          "llm_latency_ms": 1871.501879
+        },
+        "latencies_ms": {
+          "llm": 1871.501879
+        },
+        "reset_count": 0,
+        "llm_response": "Devi aggiungere 50 mL di etanolo nel becher. Usa il cilindro graduato per misurare con precisione il volume, poi trasferisci l'etanolo dal cilindro al pallone con il resorcinolo. Fammi sapere quando hai completato questo passaggio!"
+      },
+      {
+        "timestamp": "2025-08-07T19-59-31",
+        "session_id": 1,
+        "turn_id": 10,
+        "delta_prev_ms": 42797,
+        "transcription": "Che colore è l'etanolo?",
+        "words": 4,
+        "chars": 23,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1107,
+          "completion_tokens": 28,
+          "llm_latency_ms": 1671.633793
+        },
+        "latencies_ms": {
+          "llm": 1671.633793
+        },
+        "reset_count": 0,
+        "llm_response": "L'etanolo è un liquido incolore e trasparente. Se hai bisogno di ulteriori informazioni, chiedi pure!"
+      },
+      {
+        "timestamp": "2025-08-07T20-00-07",
+        "session_id": 1,
+        "turn_id": 11,
+        "delta_prev_ms": 35327,
+        "transcription": "Quanti ML devo versare?",
+        "words": 4,
+        "chars": 23,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1150,
+          "completion_tokens": 39,
+          "llm_latency_ms": 1285.652875
+        },
+        "latencies_ms": {
+          "llm": 1285.652875
+        },
+        "reset_count": 0,
+        "llm_response": "Devi versare 50 mL di etanolo. Misuralo con il cilindro graduato prima di aggiungerlo al pallone. Fammi sapere quando hai completato!"
+      },
+      {
+        "timestamp": "2025-08-07T20-00-34",
+        "session_id": 1,
+        "turn_id": 12,
+        "delta_prev_ms": 26786,
+        "transcription": "fatto.",
+        "words": 1,
+        "chars": 6,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1200,
+          "completion_tokens": 47,
+          "llm_latency_ms": 1298.849409
+        },
+        "latencies_ms": {
+          "llm": 1298.849409
+        },
+        "reset_count": 0,
+        "llm_response": "Perfetto! Ora accendi la piastra riscaldante impostandola a 60 °C. Trova il pulsante rosso per farlo. Quando la piastra è accesa, fammi sapere!"
+      },
+      {
+        "timestamp": "2025-08-07T20-01-24",
+        "session_id": 1,
+        "turn_id": 13,
+        "delta_prev_ms": 50626,
+        "transcription": "Fatto.",
+        "words": 1,
+        "chars": 6,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1258,
+          "completion_tokens": 47,
+          "llm_latency_ms": 1596.706115
+        },
+        "latencies_ms": {
+          "llm": 1596.706115
+        },
+        "reset_count": 0,
+        "llm_response": "Ottimo! Adesso prendi la provetta con l'acido solforico e versa 10 mL nel secondo becher vuoto. Assicurati di farlo con attenzione. Fammi sapere quando hai completato!"
+      },
+      {
+        "timestamp": "2025-08-07T20-01-41",
+        "session_id": 1,
+        "turn_id": 14,
+        "delta_prev_ms": 16967,
+        "transcription": "che colore è l'acido solforico?",
+        "words": 5,
+        "chars": 31,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1323,
+          "completion_tokens": 42,
+          "llm_latency_ms": 1749.923837
+        },
+        "latencies_ms": {
+          "llm": 1749.923837
+        },
+        "reset_count": 0,
+        "llm_response": "L'acido solforico è un liquido incolore. Assicurati di maneggiarlo con cautela. Quando hai versato 10 mL nel becher, fammi sapere!"
+      },
+      {
+        "timestamp": "2025-08-07T20-02-36",
+        "session_id": 1,
+        "turn_id": 15,
+        "delta_prev_ms": 54582,
+        "transcription": "Ho fatto ma vedo delle fiamme.",
+        "words": 6,
+        "chars": 30,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1383,
+          "completion_tokens": 73,
+          "llm_latency_ms": 1513.18262
+        },
+        "latencies_ms": {
+          "llm": 1513.18262
+        },
+        "reset_count": 0,
+        "llm_response": "Se stai vedendo delle fiamme finte, è un segnale che la reazione è completata. Ora puoi procedere aggiungendo lentamente l'acido nitrico (10 mL, arancione) dalla provetta al secondo becher con l'acido solforico. Fai attenzione e fammi sapere quando hai finito!"
+      },
+      {
+        "timestamp": "2025-08-07T20-03-26",
+        "session_id": 1,
+        "turn_id": 16,
+        "delta_prev_ms": 50643,
+        "transcription": "Ciao. Grazie.",
+        "words": 2,
+        "chars": 13,
+        "emotions": "Non rilevate",
+        "llm": {
+          "model_name": "gpt-4o-mini",
+          "temperature": 0.7,
+          "top_p": 0.9,
+          "prompt_tokens": 1470,
+          "completion_tokens": 40,
+          "llm_latency_ms": 3187.627297
+        },
+        "latencies_ms": {
+          "llm": 3187.627297
+        },
+        "reset_count": 0,
+        "llm_response": "Ciao! È stato un piacere aiutarti. Buon proseguimento con l'esercitazione! Se hai bisogno di ulteriore assistenza, non esitare a chiedere."
+      }
+    ]
+  ]
+}
