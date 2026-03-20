@@ -65,7 +65,6 @@ VARLIST = [
     "NASA_TLX",
     "SSQ_Total_Δ",
     "SUS",
-    "SASSI_global",
     "TCT",
     "Turns",
 ]

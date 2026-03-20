@@ -206,7 +206,7 @@ post = post.merge(perf, left_on=idcol, right_on="ID", how="left")
 # ------------------------------------------------------------
 # 6. Stats (NO multiple-comparison correction)
 # ------------------------------------------------------------
-VARLIST = ["PQ","NASA_TLX","SSQ_Total_Δ","SUS","SASSI_global","TCT","Turns"]
+VARLIST = ["PQ","NASA_TLX","SSQ_Total_Δ","SUS","TCT","Turns"]
 out=[]
 for var in VARLIST:
     a = post[post.GROUP=="EMO"][var].dropna().to_numpy()
